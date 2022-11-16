@@ -1,0 +1,20 @@
+name: password_strength_checker
+description: This is a Widget to check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
+version: 1.0.0
+homepage: https://github.com/dariowskii/password_strength_checker
+repository: https://github.com/dariowskii/password_strength_checker
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
