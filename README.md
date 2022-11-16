@@ -1,27 +1,75 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
+# PasswordStrengthChecker
 This is a Widget to check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
 
 ## Features
 ![Demo Gif](./assets/demo.gif)
 
 ## Getting started
+You can use the default `PasswordStrength` enum to set the strength of the password, or you can create your own enum that implements `PasswordStrengthItem` and use it. For example:
 
-You can use the default `PasswordStrength` enum to set the strength of the password, or you can create your own enum that implements `PasswordStrengthItem` and use it.
+```dart
+enum CustomPassStrength implements PasswordStrengthItem {
+  weak,
+  medium,
+  strong;
+
+  @override
+  Color get statusColor {
+    switch (this) {
+      case CustomPassStrength.weak:
+        return Colors.red;
+      case CustomPassStrength.medium:
+        return Colors.orange;
+      case CustomPassStrength.strong:
+        return Colors.green;
+    }
+  }
+
+  @override
+  Widget? get statusWidget {
+    switch (this) {
+      case CustomPassStrength.weak:
+        return const Text('Weak');
+      case CustomPassStrength.medium:
+        return const Text('Medium');
+      case CustomPassStrength.strong:
+        return const Text('Strong');
+      default:
+        return null;
+    }
+  }
+
+  @override
+  double get widthPerc {
+    switch (this) {
+      case CustomPassStrength.weak:
+        return 0.15;
+      case CustomPassStrength.medium:
+        return 0.4;
+      case CustomPassStrength.strong:
+        return 0.75;
+      default:
+        return 0.0;
+    }
+  }
+
+  static CustomPassStrength? calculate({required String text}) {
+    // Implement your custom logic here
+    if (text.isEmpty) {
+      return null;
+    }
+    if (text.length < 6) {
+      return CustomPassStrength.weak;
+    } else if (text.length < 10) {
+      return CustomPassStrength.medium;
+    } else {
+      return CustomPassStrength.strong;
+    }
+  }
+}
+```
 
 ## Usage
-
 ```dart
 import 'package:flutter/material.dart';
 import 'package:password_strength_checker/password_strength_checker.dart';
