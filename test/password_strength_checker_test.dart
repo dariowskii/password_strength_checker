@@ -13,8 +13,13 @@ void main() {
     expect(strength, PasswordStrength.weak);
   });
 
+  test('Calculate already exposed password', () {
+    final strength = PasswordStrength.calculate(text: 'password');
+    expect(strength, PasswordStrength.alreadyExposed);
+  });
+
   test('Calculate weak password', () {
-    final strength = PasswordStrength.calculate(text: 'aaaaaaaa');
+    final strength = PasswordStrength.calculate(text: 'weak');
     expect(strength, PasswordStrength.weak);
   });
 
