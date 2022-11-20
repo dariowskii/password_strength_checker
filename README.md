@@ -1,10 +1,43 @@
-# PasswordStrengthChecker
+# password_strength_checker
 This is a Widget to check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
 
 ## Features
+![Demo Form Gif](./assets/demo_form.gif)
 ![Demo Gif](./assets/demo.gif)
 
 ## Getting started
+
+### PasswordStrengthChecker
+
+You can use the `PasswordStrengthChecker` to only have a visual feedback, for example:
+
+```dart
+final passNotifier = ValueNotifier<PasswordStrength?>(null);
+// ...
+PasswordStrengthChecker(
+  strength: passNotifier,
+),
+```
+
+See the [full example here](./example/password_strength_checker_example.dart).
+
+### PasswordStrengthFormChecker
+
+You can use the `PasswordStrengthFormChecker` to have a built-in `TextFormField` inside the widget and get form validation using a `minimumStrengthRequired`. For example:
+
+```dart
+PasswordStrengthFormChecker(
+  minimumStrengthRequired: PasswordStrength.secure,
+  onChanged: (password, notifier) {
+    notifier.value = PasswordStrength.calculate(text: password);
+  },
+),
+```
+
+See the [full example here](./example/password_strength_form_checker_example.dart).
+
+### Custom Strength
+
 You can use the default `PasswordStrength` enum to set the strength of the password, or you can create your own enum that implements `PasswordStrengthItem` and use it. For example:
 
 ```dart
@@ -58,6 +91,11 @@ enum CustomPassStrength implements PasswordStrengthItem {
     if (text.isEmpty) {
       return null;
     }
+    // Use the [commonDictionary] to see if a password
+    // is in 10,000 common exposed password list.
+    if (commonDictionary[text] == true) {
+      return CustomPassStrength.weak;
+    }
     if (text.length < 6) {
       return CustomPassStrength.weak;
     } else if (text.length < 10) {
@@ -65,45 +103,6 @@ enum CustomPassStrength implements PasswordStrengthItem {
     } else {
       return CustomPassStrength.strong;
     }
-  }
-}
-```
-
-## Usage
-```dart
-import 'package:flutter/material.dart';
-import 'package:password_strength_checker/password_strength_checker.dart';
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final passNotifier = ValueNotifier<PasswordStrength?>(null);
-
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
-              ),
-              onChanged: (value) {
-                passNotifier.value = PasswordStrength.calculate(text: value);
-              },
-            ),
-            const SizedBox(height: 20),
-            PasswordStrengthChecker(
-              strength: passNotifier,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 ```
