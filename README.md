@@ -1,12 +1,16 @@
 # password_strength_checker
+![License](https://img.shields.io/github/license/dariowskii/password_strength_checker) ![Pub Version](https://img.shields.io/pub/v/password_strength_checker)
+
 This is a Widget to check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
 
 ## Features
 
 You can check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
 
-![Demo Form Gif](./assets/demo_form.gif)
-![Demo Gif](./assets/demo.gif)
+<div>
+<img src="./assets/demo_form.gif" style="width: 250px">
+<img src="./assets/demo.gif" style="width: 250px">
+</div>
 
 ## Getting started
 
