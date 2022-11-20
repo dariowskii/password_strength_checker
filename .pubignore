@@ -1,0 +1,7 @@
+test/
+.github/
+assets/
+build/
+doc/
+*.iml
+analysis_options.yaml
