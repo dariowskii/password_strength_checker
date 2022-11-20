@@ -8,18 +8,18 @@ void main() {
     expect(strength, null);
   });
 
-  test('Calculate weak password lower than 8 chars', () {
-    final strength = PasswordStrength.calculate(text: '1234567');
-    expect(strength, PasswordStrength.weak);
-  });
-
   test('Calculate already exposed password', () {
     final strength = PasswordStrength.calculate(text: 'password');
     expect(strength, PasswordStrength.alreadyExposed);
   });
 
+  test('Calculate weak password lower than 8 chars', () {
+    final strength = PasswordStrength.calculate(text: '1234567');
+    expect(strength, PasswordStrength.weak);
+  });
+
   test('Calculate weak password', () {
-    final strength = PasswordStrength.calculate(text: 'weak');
+    final strength = PasswordStrength.calculate(text: 'weakweak');
     expect(strength, PasswordStrength.weak);
   });
 
