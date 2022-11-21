@@ -1,3 +1,5 @@
+## 1.1.2
+Updated `PasswordStrength` calculation priority.
 ## 1.1.1
 Setted `obscureText = true` by default on `TextFormField`.
 ## 1.1.0

@@ -2,8 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:password_strength_checker/password_strength_checker.dart';
 
+import 'src/custom_strength_enum.dart';
+
 void main() {
-  test('Calculate null password', () {
+  test('Calculate null password strength', () {
     final strength = PasswordStrength.calculate(text: '');
     expect(strength, null);
   });
@@ -14,7 +16,7 @@ void main() {
   });
 
   test('Calculate weak password lower than 8 chars', () {
-    final strength = PasswordStrength.calculate(text: '1234567');
+    final strength = PasswordStrength.calculate(text: 'weak');
     expect(strength, PasswordStrength.weak);
   });
 
@@ -36,5 +38,30 @@ void main() {
   test('Calculate secure password', () {
     final strength = PasswordStrength.calculate(text: 'aaaaaaaaM1@');
     expect(strength, PasswordStrength.secure);
+  });
+
+  test('Calculate null custom password strength', () {
+    final strength = CustomPassStrength.calculate(text: '');
+    expect(strength, null);
+  });
+
+  test('Calculate weak password with custom enum', () {
+    final strength = CustomPassStrength.calculate(text: 'a');
+    expect(strength, CustomPassStrength.weak);
+  });
+
+  test('Calculate medium password with custom enum', () {
+    final strength = CustomPassStrength.calculate(text: 'a' * 8);
+    expect(strength, CustomPassStrength.medium);
+  });
+
+  test('Calculate strong password with custom enum', () {
+    final strength = CustomPassStrength.calculate(text: 'a' * 12);
+    expect(strength, CustomPassStrength.strong);
+  });
+
+  test('Calculate secure password with custom enum', () {
+    final strength = CustomPassStrength.calculate(text: 'a' * 16);
+    expect(strength, CustomPassStrength.secure);
   });
 }

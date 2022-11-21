@@ -30,7 +30,7 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     this.hideErrorMessage = false,
     this.hideConfirmationErrorMessageWhenEmpty = false,
     this.topInstructions,
-    this.needConfirmation = true,
+    this.needConfirmation = false,
     this.textFormFieldConfiguration = const TextFormFieldConfiguration(),
     this.confirmationTextFormFieldConfiguration =
         const TextFormFieldConfiguration(
@@ -68,7 +68,7 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
   /// The instructions to show above the password field.
   final Widget? topInstructions;
 
-  /// If true, the confirmation field will be shown. If true, you need to set the [textFormFieldConfiguration.controller] to work.
+  /// If true, you need to set the [textFormFieldConfiguration.controller] to work and the confirmation field will be shown.
   final bool needConfirmation;
 
   /// The configuration for the password field [TextFormField].

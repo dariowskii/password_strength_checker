@@ -21,6 +21,7 @@ enum PasswordStrength implements PasswordStrengthItem {
   strong,
   secure;
 
+  /// The color for every status.
   @override
   Color get statusColor {
     switch (this) {
@@ -39,6 +40,7 @@ enum PasswordStrength implements PasswordStrengthItem {
     }
   }
 
+  /// The percentual width of every status.
   @override
   double get widthPerc {
     switch (this) {
@@ -55,6 +57,7 @@ enum PasswordStrength implements PasswordStrengthItem {
     }
   }
 
+  /// The widget to show for every status under the bar.
   @override
   Widget? get statusWidget {
     switch (this) {
@@ -91,12 +94,12 @@ enum PasswordStrength implements PasswordStrengthItem {
       return null;
     }
 
-    if (text.length < 8) {
-      return PasswordStrength.weak;
-    }
-
     if (commonDictionary[text] == true) {
       return PasswordStrength.alreadyExposed;
+    }
+
+    if (text.length < 8) {
+      return PasswordStrength.weak;
     }
 
     final hasLowercase = text.contains(RegExp(r'[a-z]'));
