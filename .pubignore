@@ -1,6 +1,5 @@
 test/
 .github/
-assets/
 build/
 doc/
 *.iml

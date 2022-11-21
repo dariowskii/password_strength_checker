@@ -1,3 +1,5 @@
+## 1.1.1
+Setted `obscureText = true` by default on `TextFormField`.
 ## 1.1.0
 - Implemented **PasswordStrengthFormChecker** and moved all **PasswordStrengthChecker** properties into **PasswordStrengthCheckerConfiguration** object.
 - Implemented a *commonDictionary* to get the first 10,000 common passwords.
