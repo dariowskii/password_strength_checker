@@ -1,7 +1,7 @@
 /// The common password dictionary. It contains the firs 10,000 most common passwords.
-/// 
+///
 /// Use this dictionary to check if the password is common or not, for example:
-/// 
+///
 /// ```dart
 /// final isExposed = commonDictionary['password'] == true; // if true is exposed
 /// // or

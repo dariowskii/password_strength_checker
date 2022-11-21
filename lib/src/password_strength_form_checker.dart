@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../password_strength_checker.dart';
 
 /// The widget to use into a [Form] widget.
-/// 
-/// You need to set a [minimumStrengthRequired] for the password field, 
+///
+/// You need to set a [minimumStrengthRequired] for the password field,
 /// in this way the form will not be valid until at least the indicated
 /// security level is reached.
-/// 
+///
 /// You need also to set a [onChanged] callback to manage the current strength
 /// of the password based on the text. For example:
-/// 
+///
 /// ```
 /// PasswordStrengthFormChecker(
 ///   minimumStrengthRequired: PasswordStrength.secure,
@@ -46,17 +46,22 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
 
   /// The function that will be called when the text changes. You need to update the [ValueNotifier] to update the widget.
   final Function(String password, ValueNotifier<T?> strengthNotifier) onChanged;
+
   /// The minimum strength required to consider the password strong enough.
   final T minimumStrengthRequired;
 
   /// The text to show when the password is empty.
   final String? emptyTextErrorMessage;
+
   /// The text to show when the password is not strong enough.
   final String errorMessage;
+
   /// The text to show when the password confirmation is not the same as the password.
   final String confirmationErrorMessage;
+
   /// If true, the confirmation error message will not be shown when the confirmation is empty.
   final bool hideConfirmationErrorMessageWhenEmpty;
+
   /// If true, the error message will not be shown.
   final bool hideErrorMessage;
 
@@ -68,8 +73,10 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
 
   /// The configuration for the password field [TextFormField].
   final TextFormFieldConfiguration textFormFieldConfiguration;
+
   /// The configuration for the confirmation field [TextFormField].
   final TextFormFieldConfiguration confirmationTextFormFieldConfiguration;
+
   /// The configuration for the [PasswordStrengthChecker].
   final PasswordStrengthCheckerConfiguration
       passwordStrengthCheckerConfiguration;
@@ -164,7 +171,10 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
             decoration:
                 widget.confirmationTextFormFieldConfiguration.decoration,
             validator: (value) {
-              if (value == null || (value.isEmpty && !widget.hideConfirmationErrorMessageWhenEmpty) || value != widget.textFormFieldConfiguration.controller!.text) {
+              if (value == null ||
+                  (value.isEmpty &&
+                      !widget.hideConfirmationErrorMessageWhenEmpty) ||
+                  value != widget.textFormFieldConfiguration.controller!.text) {
                 return widget.confirmationErrorMessage;
               }
               return null;

@@ -1,5 +1,5 @@
 name: password_strength_checker
-description: Check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user. You can also use it for form validation.
+description: Check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user. You can also use it for form validation
 version: 1.1.0
 homepage: https://github.com/dariowskii/password_strength_checker
 repository: https://github.com/dariowskii/password_strength_checker
