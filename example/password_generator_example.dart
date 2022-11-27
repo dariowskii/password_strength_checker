@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 showGenerator: true,
                 onPasswordGenerated: (password, notifier) {
-                  print('$password - length: ${password.length}');
+                  debugPrint('$password - length: ${password.length}');
                   // Don't forget to update the notifier!
                   notifier.value = PasswordStrength.calculate(text: password);
                 },
