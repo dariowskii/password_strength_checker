@@ -1,3 +1,6 @@
+## 1.2.0
+- Implemented `PasswordGenerator` class.
+- Added support for password generator to `PasswordStrengthFormChecker`.
 ## 1.1.2
 Updated `PasswordStrength` calculation priority.
 ## 1.1.1
