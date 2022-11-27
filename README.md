@@ -6,10 +6,17 @@ Use it also inside a `Form` to get form validation!
 
 ## Features
 
-You can check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
+- Check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
+- Use the `PasswordStrengthChecker` to have a visual feedback.
+- Use the `PasswordStrengthFormChecker` to have a built-in `TextFormField` inside the widget and get form validation using a `minimumStrengthRequired`.
+- Use the `PasswordGenerator` class to generate a **secure** random password based on the input configurations (`PasswordGeneratorConfiguration`).
+- Create your custom strength to create your own rules or use the `PasswordStrength` default enum (see [Custom Strength](#custom-strength)).
+
+## Demo
 
 ![Demo Form Gif](./assets/demo_form.gif)
 ![Demo Gif](./assets/demo.gif)
+![Demo Generator Gif](./assets/demo_generator.gif)
 
 ## Getting started
 
@@ -41,6 +48,27 @@ PasswordStrengthFormChecker(
 ```
 
 See the [full example here](./example/password_strength_form_checker_example.dart).
+
+### PasswordGenerator
+
+You can use the `PasswordGenerator`class to generate a **secure** random password based on the configurations. For example:
+
+```dart
+final config = PasswordGeneratorConfiguration(
+  length: 32,
+  minUppercase: 8,
+  minSpecialChars: 8,
+  // ...
+);
+
+final passwordGenerator = PasswordGenerator.fromConfig(
+  configuration: config,
+);
+
+final password = passwordGenerator.generate();
+```
+
+See the [full example here](./example/password_generator_example.dart).
 
 ### Custom Strength
 
