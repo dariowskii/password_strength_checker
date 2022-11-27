@@ -1,15 +1,24 @@
 # password_strength_checker
 ![License](https://img.shields.io/github/license/dariowskii/password_strength_checker) ![Pub Version](https://img.shields.io/pub/v/password_strength_checker) ![Pub Likes](https://img.shields.io/pub/likes/password_strength_checker) ![Pub Points](https://img.shields.io/pub/points/password_strength_checker) ![Pub Popularity](https://img.shields.io/pub/popularity/password_strength_checker) [![CI](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml)
 
+Generate **secure** passwords, check for exposed passwords, get visual feedback for password strength or get form validation with a minimum password strength required.
+
 Check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
 Use it also inside a `Form` to get form validation!
 
 ## Features
 
-You can check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
+- Check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
+- Use the `PasswordStrengthChecker` to have a visual feedback.
+- Use the `PasswordStrengthFormChecker` to have a built-in `TextFormField` inside the widget and get form validation using a `minimumStrengthRequired`.
+- Use the `PasswordGenerator` class to generate a **secure** random password based on the input configurations (`PasswordGeneratorConfiguration`).
+- Create your custom strength to create your own rules or use the `PasswordStrength` default enum (see [Custom Strength](#custom-strength)).
+
+## Demo
 
 ![Demo Form Gif](./assets/demo_form.gif)
 ![Demo Gif](./assets/demo.gif)
+![Demo Generator Gif](./assets/demo_generator.gif)
 
 ## Getting started
 
@@ -41,6 +50,27 @@ PasswordStrengthFormChecker(
 ```
 
 See the [full example here](./example/password_strength_form_checker_example.dart).
+
+### PasswordGenerator
+
+You can use the `PasswordGenerator`class to generate a **secure** random password based on the configurations. For example:
+
+```dart
+final config = PasswordGeneratorConfiguration(
+  length: 32,
+  minUppercase: 8,
+  minSpecialChars: 8,
+  // ...
+);
+
+final passwordGenerator = PasswordGenerator.fromConfig(
+  configuration: config,
+);
+
+final password = passwordGenerator.generate();
+```
+
+See the [full example here](./example/password_generator_example.dart).
 
 ### Custom Strength
 
