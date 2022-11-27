@@ -14,8 +14,9 @@ void main() {
 
   test('Generate secure password with length 8', () {
     const config = PasswordGeneratorConfiguration(length: 8);
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.length, 8);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.secure);
@@ -38,8 +39,9 @@ void main() {
       length: 8,
       useLowercase: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[a-z]')), false);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.strong);
@@ -50,8 +52,9 @@ void main() {
       length: 8,
       useDigits: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[0-9]')), false);
     expect(PasswordStrength.strong, PasswordStrength.calculate(text: password));
@@ -64,8 +67,9 @@ void main() {
       useUppercase: false,
       useSpecialChars: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[0-9]')), true);
     expect(password.contains(RegExp(r'[a-z]')), false);
@@ -81,8 +85,9 @@ void main() {
       useUppercase: false,
       useSpecialChars: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[a-z]')), true);
     expect(password.contains(RegExp(r'[0-9]')), false);
@@ -98,8 +103,9 @@ void main() {
       useLowercase: false,
       useSpecialChars: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[A-Z]')), true);
     expect(password.contains(RegExp(r'[0-9]')), false);
@@ -115,8 +121,9 @@ void main() {
       useLowercase: false,
       useUppercase: false,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'[!@#\$%^&*(){}?£~\-_+=]')), true);
     expect(password.contains(RegExp(r'[0-9]')), false);
@@ -129,8 +136,9 @@ void main() {
     const config = PasswordGeneratorConfiguration(
       minUppercase: 8,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'(.*[A-Z]){8}')), true);
   });
@@ -139,8 +147,9 @@ void main() {
     const config = PasswordGeneratorConfiguration(
       minLowercase: 8,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'(.*[a-z]){8}')), true);
   });
@@ -149,8 +158,9 @@ void main() {
     const config = PasswordGeneratorConfiguration(
       minDigits: 8,
     );
-    final password =
-        PasswordGenerator.fromConfig(configuration: config).generate();
+    final password = PasswordGenerator.fromConfig(
+      configuration: config,
+    ).generate();
 
     expect(password.contains(RegExp(r'(.*[0-9]){8}')), true);
   });
