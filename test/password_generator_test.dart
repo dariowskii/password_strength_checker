@@ -116,7 +116,7 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[!@#\$%&*()?\-_=+]{8}')), true);
+    expect(password.contains(RegExp(r'[!@#\$%&*()?\-_=]{8}')), true);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.weak);
   });
 
