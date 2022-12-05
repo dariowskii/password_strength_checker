@@ -1,5 +1,5 @@
 # password_strength_checker
-![License](https://img.shields.io/github/license/dariowskii/password_strength_checker) ![Pub Version](https://img.shields.io/pub/v/password_strength_checker) ![Pub Likes](https://img.shields.io/pub/likes/password_strength_checker) ![Pub Points](https://img.shields.io/pub/points/password_strength_checker) ![Pub Popularity](https://img.shields.io/pub/popularity/password_strength_checker) [![CI](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml)
+![License](https://img.shields.io/github/license/dariowskii/password_strength_checker) ![Pub Version](https://img.shields.io/pub/v/password_strength_checker) ![Pub Likes](https://img.shields.io/pub/likes/password_strength_checker) ![Pub Points](https://img.shields.io/pub/points/password_strength_checker) ![Pub Popularity](https://img.shields.io/pub/popularity/password_strength_checker) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/dariowskii/password_strength_checker?label=size) ![GitHub Repo stars](https://img.shields.io/github/stars/dariowskii/password_strength_checker) ![GitHub issues](https://img.shields.io/github/issues/dariowskii/password_strength_checker) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/dariowskii/password_strength_checker) ![GitHub top language](https://img.shields.io/github/languages/top/dariowskii/password_strength_checker) [![CI](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml)
 
 Generate **secure** passwords, check for exposed passwords, get visual feedback for password strength or get form validation with a minimum password strength required.
 
@@ -142,3 +142,21 @@ enum CustomPassStrength implements PasswordStrengthItem {
   }
 }
 ```
+
+## Contribution
+
+The project is open source and you can contribute to it here -> [repository link](https://github.com/dariowskii/password_strength_checker)
+
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
+
+## Contributors
+
+<a href="https://github.com/dariowskii/password_strength_checker/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dariowskii/password_strength_checker" />
+</a>
+
+---
+
+Made with ❤️ from [dariowskii](https://www.linkedin.com/in/dario-varriale/)
