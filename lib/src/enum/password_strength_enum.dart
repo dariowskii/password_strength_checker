@@ -106,7 +106,7 @@ enum PasswordStrength implements PasswordStrengthItem {
     if (text.contains(RegExp(r'[a-z]'))) counter++;
     if (text.contains(RegExp(r'[A-Z]'))) counter++;
     if (text.contains(RegExp(r'[0-9]'))) counter++;
-    if (text.contains(RegExp(r'[!@#\$%&*()?\-_=]'))) counter++;
+    if (text.contains(RegExp(r'[!@#\$%&*()?£\-_=]'))) counter++;
 
     switch (counter) {
       case 1:
