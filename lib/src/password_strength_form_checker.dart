@@ -126,7 +126,7 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
     final passwordGenerator = PasswordGenerator.fromConfig(
       configuration: widget.passwordGeneratorConfiguration,
     );
-    
+
     return Column(
       children: [
         if (widget.topInstructions != null) widget.topInstructions!,
