@@ -4,12 +4,13 @@ import 'package:password_strength_checker/password_strength_checker.dart';
 void main() {
   test('Default password length is 16', () {
     final password = const PasswordGenerator().generate();
-    expect(password.length, 16);
+    expect(password.length, 16, reason: 'Generated password: $password');
   });
 
   test('Generate secure password', () {
     final password = const PasswordGenerator().generate();
-    expect(PasswordStrength.secure, PasswordStrength.calculate(text: password));
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.secure,
+        reason: 'Generated password: $password');
   });
 
   test('Generate secure password with length 8', () {
@@ -19,7 +20,8 @@ void main() {
     ).generate();
 
     expect(password.length, 8);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.secure);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.secure,
+        reason: 'Generated password: $password');
   });
 
   test('Generate strong password without uppercase', () {
@@ -31,7 +33,8 @@ void main() {
         PasswordGenerator.fromConfig(configuration: config).generate();
 
     expect(password.contains(RegExp(r'[A-Z]')), false);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.strong);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.strong,
+        reason: 'Generated password: $password');
   });
 
   test('Generate strong password without lowercase', () {
@@ -44,7 +47,8 @@ void main() {
     ).generate();
 
     expect(password.contains(RegExp(r'[a-z]')), false);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.strong);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.strong,
+        reason: 'Generated password: $password');
   });
 
   test('Generate strong password without digits', () {
@@ -57,7 +61,8 @@ void main() {
     ).generate();
 
     expect(password.contains(RegExp(r'[0-9]')), false);
-    expect(PasswordStrength.strong, PasswordStrength.calculate(text: password));
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.strong,
+        reason: 'Generated password: $password');
   });
 
   test('Generate weak password only digits', () {
@@ -72,7 +77,8 @@ void main() {
     ).generate();
 
     expect(password.contains(RegExp(r'[0-9]{8}')), true);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
+        reason: 'Generated password: $password');
   });
 
   test('Generate weak password only lowercase', () {
@@ -87,7 +93,8 @@ void main() {
     ).generate();
 
     expect(password.contains(RegExp(r'[a-z]{8}')), true);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
+        reason: 'Generated password: $password');
   });
 
   test('Generate weak password only uppercase', () {
@@ -102,7 +109,8 @@ void main() {
     ).generate();
 
     expect(password.contains(RegExp(r'[A-Z]{8}')), true);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
+        reason: 'Generated password: $password');
   });
 
   test('Generate weak password only special chars', () {
@@ -116,8 +124,9 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[!@#\$%&*()?\-_=]{8}')), true);
-    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak);
+    expect(password.contains(RegExp(r'[!@#\$%&*()?£\-_=]{8}')), true);
+    expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
+        reason: 'Generated password: $password');
   });
 
   test('Generate password with minUppercase = 8', () {
@@ -128,7 +137,8 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[A-Z]){8}')), true);
+    expect(password.contains(RegExp(r'(.*[A-Z]){8}')), true,
+        reason: 'Generated password: $password');
   });
 
   test('Generate password with minLowercase = 8', () {
@@ -139,7 +149,8 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[a-z]){8}')), true);
+    expect(password.contains(RegExp(r'(.*[a-z]){8}')), true,
+        reason: 'Generated password: $password');
   });
 
   test('Generate password with minDigits = 8', () {
@@ -150,7 +161,8 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[0-9]){8}')), true);
+    expect(password.contains(RegExp(r'(.*[0-9]){8}')), true,
+        reason: 'Generated password: $password');
   });
 
   test('Generate password with specific special chars', () {
@@ -165,6 +177,7 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[!@#\$]{16}')), true);
+    expect(password.contains(RegExp(r'[!@#\$]{16}')), true,
+        reason: 'Generated password: $password');
   });
 }
