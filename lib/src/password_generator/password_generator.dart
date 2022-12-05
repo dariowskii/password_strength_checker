@@ -51,7 +51,7 @@ class PasswordGenerator {
         if (useUppercase) ...defaultUppercaseChars,
       ];
 
-  PasswordGenerator({
+  const PasswordGenerator({
     this.length = defaultLength,
     this.minLowercase = defaultMinLowercase,
     this.minUppercase = defaultMinUppercase,
@@ -63,7 +63,38 @@ class PasswordGenerator {
     this.useLowercase = true,
     this.useUppercase = true,
     this.numberOfShuffles = 1,
-  });
+  })  : assert(
+          length > 0,
+          'The length of the password must be greater than 0',
+        ),
+        assert(
+          length >= minLowercase + minUppercase + minDigits + minSpecial,
+          'The length of the password must be greater than or equal to the sum of the minimum number of lowercase, uppercase, digits and special characters',
+        ),
+        assert(
+          numberOfShuffles >= 1,
+          'The number of shuffles must be greater than or equal to 1',
+        ),
+        assert(
+          minLowercase >= 0,
+          'The minimum number of lowercase characters must be greater than or equal to 0',
+        ),
+        assert(
+          minUppercase >= 0,
+          'The minimum number of uppercase characters must be greater than or equal to 0',
+        ),
+        assert(
+          minDigits >= 0,
+          'The minimum number of digits must be greater than or equal to 0',
+        ),
+        assert(
+          minSpecial >= 0,
+          'The minimum number of special characters must be greater than or equal to 0',
+        ),
+        assert(
+          useSpecialChars || useDigits || useLowercase || useUppercase,
+          'At least one of the useSpecialChars, useDigits, useLowercase or useUppercase must be true',
+        );
 
   /// Return a [PasswordGenerator] based on the configuration.
   factory PasswordGenerator.fromConfig(
@@ -84,9 +115,16 @@ class PasswordGenerator {
   }
 
   /// Generates a password based on the configuration.
-  String generate() {
-    final stopwatch = Stopwatch()..start();
-    
+  String generate({bool printDebugInfo = false}) {
+    late final Stopwatch stopwatch;
+    late final String debugSeparator;
+    if (printDebugInfo) {
+      stopwatch = Stopwatch()..start();
+      debugSeparator = '-' * 50;
+      debugPrint(
+          '$debugSeparator\n$runtimeType: START GENERATING PASSWORD\n$debugSeparator');
+    }
+
     final random = Random.secure();
     final minLowercase = useLowercase ? this.minLowercase : 0;
     final minUppercase = useUppercase ? this.minUppercase : 0;
@@ -104,9 +142,19 @@ class PasswordGenerator {
     final defaultSpecialCharsLength = specialChars.length;
     final allCharsLength = allChars.length;
 
+    if (printDebugInfo && minLowercase > 0) {
+      debugPrint(
+          '$runtimeType: adding $minLowercase minimum lowercase characters...');
+    }
+
     for (var i = 0; i < minLowercase; i++) {
       buffer
           .write(defaultLowercaseChars[random.nextInt(defaultLowercaseLength)]);
+    }
+
+    if (printDebugInfo && minUppercase > 0) {
+      debugPrint(
+          '$runtimeType: adding $minUppercase minimum uppercase characters...');
     }
 
     for (var i = 0; i < minUppercase; i++) {
@@ -114,21 +162,36 @@ class PasswordGenerator {
           .write(defaultUppercaseChars[random.nextInt(defaultUppercaseLength)]);
     }
 
+    if (printDebugInfo && minDigits > 0) {
+      debugPrint('$runtimeType: adding $minDigits minimum digits...');
+    }
+
     for (var i = 0; i < minDigits; i++) {
       buffer.write(defaultDigits[random.nextInt(defaultDigitsLength)]);
+    }
+
+    if (printDebugInfo && minSpecial > 0) {
+      debugPrint(
+          '$runtimeType: adding $minSpecial minimum special characters...');
     }
 
     for (var i = 0; i < minSpecial; i++) {
       buffer.write(specialChars[random.nextInt(defaultSpecialCharsLength)]);
     }
 
+    if (printDebugInfo && remaining > 0) {
+      debugPrint('$runtimeType: filling $remaining remaining characters...');
+    }
+
     for (var i = 0; i < remaining; i++) {
       buffer.write(allChars[random.nextInt(allCharsLength)]);
     }
 
-    final firstPassword = buffer.toString();
+    final passwordCodeUnits = List<int>.from(buffer.toString().codeUnits);
 
-    final passwordCodeUnits = List<int>.from(firstPassword.codeUnits);
+    if (printDebugInfo) {
+      debugPrint('$runtimeType: shuffling password...');
+    }
 
     for (var i = 0; i < numberOfShuffles; i++) {
       passwordCodeUnits.shuffle(random);
@@ -136,7 +199,12 @@ class PasswordGenerator {
 
     final shuffeledPassword = String.fromCharCodes(passwordCodeUnits);
 
-    debugPrint('Password generated in ${stopwatch.elapsedMilliseconds}ms');
+    if (printDebugInfo) {
+      stopwatch.stop();
+      debugPrint(
+        '$debugSeparator\nPassword $shuffeledPassword generated in ${stopwatch.elapsedMilliseconds}ms\n$debugSeparator',
+      );
+    }
 
     return shuffeledPassword;
   }
