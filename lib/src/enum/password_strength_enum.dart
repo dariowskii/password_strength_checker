@@ -102,22 +102,11 @@ enum PasswordStrength implements PasswordStrengthItem {
       return PasswordStrength.weak;
     }
 
-    final hasLowercase = text.contains(RegExp(r'[a-z]'));
-    final hasUppercase = text.contains(RegExp(r'[A-Z]'));
-    final hasDigits = text.contains(RegExp(r'[0-9]'));
-    final hasSpecialChars = text.contains(RegExp(r'[!@#\$%^&*(){}?£~\-_+=]'));
-
     var counter = 0;
-    for (final element in [
-      hasLowercase,
-      hasUppercase,
-      hasDigits,
-      hasSpecialChars
-    ]) {
-      if (element) {
-        counter++;
-      }
-    }
+    if (text.contains(RegExp(r'[a-z]'))) counter++;
+    if (text.contains(RegExp(r'[A-Z]'))) counter++;
+    if (text.contains(RegExp(r'[0-9]'))) counter++;
+    if (text.contains(RegExp(r'[!@#\$%&*()?\-_=+]'))) counter++;
 
     switch (counter) {
       case 1:
