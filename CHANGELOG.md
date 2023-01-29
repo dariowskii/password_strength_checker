@@ -1,3 +1,5 @@
+## 1.2.2
+Implemented `contextMenuBuilder` support and removed `toolbarOptions` from `TextFormFieldConfiguration` class.
 ## 1.2.1
 Update `PasswordGenerator` class + tests.
 ## 1.2.0
