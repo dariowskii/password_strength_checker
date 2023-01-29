@@ -54,8 +54,8 @@ class TextFormFieldConfiguration {
   /// The TextFormField readOnly.
   final bool readOnly;
 
-  /// The TextFormField toolbarOptions.
-  final ToolbarOptions? toolbarOptions;
+  /// The TextFormField contextMenuBuilder.
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
 
   /// The TextFormField showCursor.
   final bool? showCursor;
@@ -184,7 +184,7 @@ class TextFormFieldConfiguration {
     this.textAlignVertical,
     this.autofocus = false,
     this.readOnly = false,
-    this.toolbarOptions,
+    this.contextMenuBuilder,
     this.showCursor,
     this.obscuringCharacter = '•',
     this.obscureText = true,
@@ -239,7 +239,7 @@ class TextFormFieldConfiguration {
     TextAlignVertical? textAlignVertical,
     bool? autofocus,
     bool? readOnly,
-    ToolbarOptions? toolbarOptions,
+    Widget Function(BuildContext, EditableTextState)? contextMenuBuilder,
     bool? showCursor,
     String? obscuringCharacter,
     bool? obscureText,
@@ -296,7 +296,7 @@ class TextFormFieldConfiguration {
       textAlignVertical: textAlignVertical ?? this.textAlignVertical,
       autofocus: autofocus ?? this.autofocus,
       readOnly: readOnly ?? this.readOnly,
-      toolbarOptions: toolbarOptions ?? this.toolbarOptions,
+      contextMenuBuilder: contextMenuBuilder ?? this.contextMenuBuilder,
       showCursor: showCursor ?? this.showCursor,
       obscuringCharacter: obscuringCharacter ?? this.obscuringCharacter,
       obscureText: obscureText ?? this.obscureText,

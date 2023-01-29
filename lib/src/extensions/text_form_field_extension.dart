@@ -19,7 +19,7 @@ extension FromConfig on TextFormField {
       textAlign: configuration.textAlign,
       textDirection: configuration.textDirection,
       readOnly: configuration.readOnly,
-      toolbarOptions: configuration.toolbarOptions,
+      contextMenuBuilder: configuration.contextMenuBuilder,
       showCursor: configuration.showCursor,
       obscuringCharacter: configuration.obscuringCharacter,
       obscureText: configuration.obscureText,
