@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class PasswordStrengthCheckerConfiguration {
+  /// Complete checker only with secure passwords. 
+  /// If false, the checker will be completed with strong passwords.
+  final bool completeWithSecurePasswordOnly;
+
   /// The width of the widget.
   final double width;
 
@@ -44,6 +48,7 @@ class PasswordStrengthCheckerConfiguration {
   final BorderRadiusGeometry? internalBorderRadius;
 
   const PasswordStrengthCheckerConfiguration({
+    this.completeWithSecurePasswordOnly = true,
     this.width = double.maxFinite,
     this.height = 20,
     this.leftToRight = true,

@@ -46,13 +46,18 @@ class PasswordStrengthChecker<T extends PasswordStrengthItem>
               ),
               child: LayoutBuilder(
                 builder: (_, constraints) {
+                  double widthPerc = currentStrength?.widthPerc ?? 0;
+                  if (!configuration.completeWithSecurePasswordOnly) {
+                    if (widthPerc == PasswordStrength.strong.widthPerc) {
+                      widthPerc = PasswordStrength.secure.widthPerc;
+                    }
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(2),
                     child: AnimatedContainer(
                       duration: configuration.animationDuration,
                       curve: configuration.animationCurve,
-                      width: constraints.maxWidth *
-                          (currentStrength?.widthPerc ?? 0),
+                      width: constraints.maxWidth * widthPerc,
                       decoration: BoxDecoration(
                         color: currentStrength?.statusColor,
                         borderRadius: configuration.internalBorderRadius,
