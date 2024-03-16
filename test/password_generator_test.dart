@@ -13,20 +13,20 @@ void main() {
         reason: 'Generated password: $password');
   });
 
-  test('Generate secure password with length 8', () {
-    const config = PasswordGeneratorConfiguration(length: 8);
+  test('Generate secure password with length 12', () {
+    const config = PasswordGeneratorConfiguration(length: 12);
     final password = PasswordGenerator.fromConfig(
       configuration: config,
     ).generate();
 
-    expect(password.length, 8);
+    expect(password.length, 12);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.secure,
         reason: 'Generated password: $password');
   });
 
   test('Generate strong password without uppercase', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useUppercase: false,
     );
     final password =
@@ -39,7 +39,7 @@ void main() {
 
   test('Generate strong password without lowercase', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useLowercase: false,
     );
     final password = PasswordGenerator.fromConfig(
@@ -53,7 +53,7 @@ void main() {
 
   test('Generate strong password without digits', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useDigits: false,
     );
     final password = PasswordGenerator.fromConfig(
@@ -67,7 +67,7 @@ void main() {
 
   test('Generate weak password only digits', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useLowercase: false,
       useUppercase: false,
       useSpecialChars: false,
@@ -76,14 +76,14 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[0-9]{8}')), true);
+    expect(password.contains(RegExp(r'[0-9]{12}')), true);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
         reason: 'Generated password: $password');
   });
 
   test('Generate weak password only lowercase', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useDigits: false,
       useUppercase: false,
       useSpecialChars: false,
@@ -92,14 +92,14 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[a-z]{8}')), true);
+    expect(password.contains(RegExp(r'[a-z]{12}')), true);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
         reason: 'Generated password: $password');
   });
 
   test('Generate weak password only uppercase', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useDigits: false,
       useLowercase: false,
       useSpecialChars: false,
@@ -108,14 +108,14 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[A-Z]{8}')), true);
+    expect(password.contains(RegExp(r'[A-Z]{12}')), true);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
         reason: 'Generated password: $password');
   });
 
   test('Generate weak password only special chars', () {
     const config = PasswordGeneratorConfiguration(
-      length: 8,
+      length: 12,
       useDigits: false,
       useLowercase: false,
       useUppercase: false,
@@ -124,44 +124,44 @@ void main() {
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'[!@#\$%&*()?£\-_=]{8}')), true);
+    expect(password.contains(RegExp(r'[!@#\$%&*()?£\-_=]{12}')), true);
     expect(PasswordStrength.calculate(text: password), PasswordStrength.weak,
         reason: 'Generated password: $password');
   });
 
-  test('Generate password with minUppercase = 8', () {
+  test('Generate password with minUppercase = 12', () {
     const config = PasswordGeneratorConfiguration(
-      minUppercase: 8,
+      minUppercase: 12,
     );
     final password = PasswordGenerator.fromConfig(
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[A-Z]){8}')), true,
+    expect(password.contains(RegExp(r'(.*[A-Z]){12}')), true,
         reason: 'Generated password: $password');
   });
 
-  test('Generate password with minLowercase = 8', () {
+  test('Generate password with minLowercase = 12', () {
     const config = PasswordGeneratorConfiguration(
-      minLowercase: 8,
+      minLowercase: 12,
     );
     final password = PasswordGenerator.fromConfig(
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[a-z]){8}')), true,
+    expect(password.contains(RegExp(r'(.*[a-z]){12}')), true,
         reason: 'Generated password: $password');
   });
 
-  test('Generate password with minDigits = 8', () {
+  test('Generate password with minDigits = 12', () {
     const config = PasswordGeneratorConfiguration(
-      minDigits: 8,
+      minDigits: 12,
     );
     final password = PasswordGenerator.fromConfig(
       configuration: config,
     ).generate();
 
-    expect(password.contains(RegExp(r'(.*[0-9]){8}')), true,
+    expect(password.contains(RegExp(r'(.*[0-9]){12}')), true,
         reason: 'Generated password: $password');
   });
 

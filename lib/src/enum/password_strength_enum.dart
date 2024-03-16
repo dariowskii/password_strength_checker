@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../dict/common_passwords.dart';
 
+/// The default password strength length.
+const int defaultStrengthLength = 12;
+
 /// The abstract class for the password strength enum.
 abstract class PasswordStrengthItem extends Enum {
   /// The color for every status.
@@ -98,7 +101,7 @@ enum PasswordStrength implements PasswordStrengthItem {
       return PasswordStrength.alreadyExposed;
     }
 
-    if (text.length < 8) {
+    if (text.length < defaultStrengthLength) {
       return PasswordStrength.weak;
     }
 
@@ -125,7 +128,7 @@ enum PasswordStrength implements PasswordStrengthItem {
   /// Instructions for the password strength.
   static String get instructions {
     return 'Enter a password that contains:\n\n'
-        '• At least 8 characters\n'
+        '• At least $defaultStrengthLength characters\n'
         '• At least 1 lowercase letter\n'
         '• At least 1 uppercase letter\n'
         '• At least 1 digit\n'
