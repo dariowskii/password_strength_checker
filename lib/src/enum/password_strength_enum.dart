@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../dict/common_passwords.dart';
 
 /// The default password strength length.
-const int defaultStrengthLength = 12;
+const int kDefaultStrengthLength = 12;
 
 /// The abstract class for the password strength enum.
 abstract class PasswordStrengthItem extends Enum {
@@ -66,11 +66,7 @@ enum PasswordStrength implements PasswordStrengthItem {
     switch (this) {
       case PasswordStrength.alreadyExposed:
         return Row(
-          children: [
-            const Text('Already exposed'),
-            const SizedBox(width: 5),
-            Icon(Icons.error, color: statusColor)
-          ],
+          children: [const Text('Already exposed'), const SizedBox(width: 5), Icon(Icons.error, color: statusColor)],
         );
       case PasswordStrength.weak:
         return const Text('Weak');
@@ -80,11 +76,7 @@ enum PasswordStrength implements PasswordStrengthItem {
         return const Text('Strong');
       case PasswordStrength.secure:
         return Row(
-          children: [
-            const Text('Secure'),
-            const SizedBox(width: 5),
-            Icon(Icons.check_circle, color: statusColor)
-          ],
+          children: [const Text('Secure'), const SizedBox(width: 5), Icon(Icons.check_circle, color: statusColor)],
         );
       default:
         return null;
@@ -101,7 +93,7 @@ enum PasswordStrength implements PasswordStrengthItem {
       return PasswordStrength.alreadyExposed;
     }
 
-    if (text.length < defaultStrengthLength) {
+    if (text.length < kDefaultStrengthLength) {
       return PasswordStrength.weak;
     }
 
@@ -128,7 +120,7 @@ enum PasswordStrength implements PasswordStrengthItem {
   /// Instructions for the password strength.
   static String get instructions {
     return 'Enter a password that contains:\n\n'
-        '• At least $defaultStrengthLength characters\n'
+        '• At least $kDefaultStrengthLength characters\n'
         '• At least 1 lowercase letter\n'
         '• At least 1 uppercase letter\n'
         '• At least 1 digit\n'
