@@ -1,11 +1,11 @@
 name: password_strength_checker
 description: Generate secure passwords, check for exposed passwords, get visual feedback for strength or get form validation with a minimum password strength required.
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/dariowskii/password_strength_checker
 repository: https://github.com/dariowskii/password_strength_checker
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=2.18.2 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
