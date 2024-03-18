@@ -1,4 +1,4 @@
-/// The default legth of the password.
+/// The default length of the password.
 const int defaultLength = 16;
 
 /// The default minimum number of lowercase characters.
