@@ -1,3 +1,6 @@
+## 1.2.3
+Implemented a `kDefaultStrengthLength` constant with a default value of 12.
+From now, a password with a `length < 12` will be considered weak.
 ## 1.2.2
 Implemented `contextMenuBuilder` support and removed `toolbarOptions` from `TextFormFieldConfiguration` class.
 ## 1.2.1
