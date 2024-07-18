@@ -9,6 +9,7 @@ extension FromConfig on TextFormField {
     return TextFormField(
       decoration: configuration.decoration,
       validator: configuration.validator,
+      onChanged: configuration.onChanged,
       key: configuration.key,
       controller: configuration.controller,
       focusNode: configuration.focusNode,
