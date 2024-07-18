@@ -1,3 +1,5 @@
+## 1.2.4
+Fix #8
 ## 1.2.3
 Implemented a `kDefaultStrengthLength` constant with a default value of 12.
 From now, a password with a `length < 12` will be considered weak.
