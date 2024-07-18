@@ -284,6 +284,7 @@ class TextFormFieldConfiguration {
       controller: controller ?? this.controller,
       initialValue: initialValue ?? this.initialValue,
       validator: validator ?? this.validator,
+      onChanged: onChanged ?? this.onChanged,
       focusNode: focusNode ?? this.focusNode,
       decoration: decoration ?? this.decoration,
       keyboardType: keyboardType ?? this.keyboardType,
