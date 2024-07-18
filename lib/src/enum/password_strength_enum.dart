@@ -66,7 +66,11 @@ enum PasswordStrength implements PasswordStrengthItem {
     switch (this) {
       case PasswordStrength.alreadyExposed:
         return Row(
-          children: [const Text('Already exposed'), const SizedBox(width: 5), Icon(Icons.error, color: statusColor)],
+          children: [
+            const Text('Already exposed'),
+            const SizedBox(width: 5),
+            Icon(Icons.error, color: statusColor)
+          ],
         );
       case PasswordStrength.weak:
         return const Text('Weak');
@@ -76,7 +80,11 @@ enum PasswordStrength implements PasswordStrengthItem {
         return const Text('Strong');
       case PasswordStrength.secure:
         return Row(
-          children: [const Text('Secure'), const SizedBox(width: 5), Icon(Icons.check_circle, color: statusColor)],
+          children: [
+            const Text('Secure'),
+            const SizedBox(width: 5),
+            Icon(Icons.check_circle, color: statusColor)
+          ],
         );
       default:
         return null;
