@@ -12,15 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-      - uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.1.7
 
       - name: Setup Flutter
-      - uses: subosito/flutter-action@v2.14.0
+        uses: subosito/flutter-action@v2.14.0
         with:
           cache: true
 
       - name: Getting packages
-      - run: flutter pub get
+        run: flutter pub get
 
       - name: Check for any formatting issues in the code
         run: dart format --set-exit-if-changed .
