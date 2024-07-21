@@ -11,11 +11,22 @@ jobs:
     name: Run flutter test and analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      - name: Checkout repo
+      - uses: actions/checkout@v4.1.7
+
+      - name: Setup Flutter
+      - uses: subosito/flutter-action@v2.14.0
         with:
-          channel: "stable"
           cache: true
+
+      - name: Getting packages
       - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test
+
+      - name: Check for any formatting issues in the code
+        run: dart format --set-exit-if-changed .
+
+      - name: Statically analyze the Dart code for any errors
+        run: flutter analyze
+
+      - name: Run unit tests.
+        run: flutter test
