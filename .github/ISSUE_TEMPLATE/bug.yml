@@ -25,7 +25,7 @@ body:
       placeholder: Tell us what you see!
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Flutter Version
