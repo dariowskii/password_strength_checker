@@ -1,6 +1,6 @@
 name: password_strength_checker
 description: Generate secure passwords, check for exposed passwords, get visual feedback for strength or get form validation with a minimum password strength required.
-version: 1.2.4
+version: 1.3.0
 issue_tracker: https://github.com/dariowskii/password_strength_checker/issues
 topics: [password, generator, password-strength]
 homepage: https://github.com/dariowskii/password_strength_checker

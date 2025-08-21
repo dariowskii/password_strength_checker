@@ -1,3 +1,8 @@
+## 1.3.0
+**Important**: Updated Dart SDK constraint to `>=3.0.0 <4.0.0`.
+- Updated with new Dart pattern matching syntax.
+- Optimized widgets for better performance.
+- Fix a `ValueNotifier` memory leak inside the `PasswordStrengthFormChecker` disposing it correctly.
 ## 1.2.4
 Fix #8
 ## 1.2.3
