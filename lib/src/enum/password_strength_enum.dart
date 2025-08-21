@@ -49,6 +49,7 @@ enum PasswordStrength implements PasswordStrengthItem {
   @override
   Widget get statusWidget => switch (this) {
         PasswordStrength.alreadyExposed => Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text('Already exposed'),
               const SizedBox(width: 5),
@@ -59,6 +60,7 @@ enum PasswordStrength implements PasswordStrengthItem {
         PasswordStrength.medium => const Text('Medium'),
         PasswordStrength.strong => const Text('Strong'),
         PasswordStrength.secure => Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text('Secure'),
               const SizedBox(width: 5),
