@@ -196,13 +196,7 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
             width: widget.generateButtonSize.width,
             height: widget.generateButtonSize.height,
             child: ElevatedButton(
-              style: widget.generateButtonStyle ??
-                  ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black87,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+              style: widget.generateButtonStyle,
               onPressed: () {
                 final password = _passwordGenerator.generate();
 
