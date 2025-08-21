@@ -96,9 +96,6 @@ final class TextFormFieldConfiguration {
   /// The maximum length of the text field.
   final int? maxLength;
 
-  /// Called when the text changes.
-  final void Function(String)? onChanged;
-
   /// Called when the text field is tapped.
   final void Function()? onTap;
 
@@ -119,9 +116,6 @@ final class TextFormFieldConfiguration {
 
   /// Called when the text field should save its current value.
   final void Function(String?)? onSaved;
-
-  /// The validation logic for the text field.
-  final String? Function(String?)? validator;
 
   /// The error builder for the text field.
   final Widget Function(BuildContext, String)? errorBuilder;
@@ -272,7 +266,6 @@ final class TextFormFieldConfiguration {
     this.minLines,
     this.expands = false,
     this.maxLength,
-    this.onChanged,
     this.onTap,
     this.onTapAlwaysCalled = false,
     this.onTapOutside,
@@ -280,7 +273,6 @@ final class TextFormFieldConfiguration {
     this.onEditingComplete,
     this.onFieldSubmitted,
     this.onSaved,
-    this.validator,
     this.errorBuilder,
     this.inputFormatters,
     this.enabled,
@@ -354,7 +346,6 @@ final class TextFormFieldConfiguration {
     int? minLines,
     bool? expands,
     int? maxLength,
-    void Function(String)? onChanged,
     void Function()? onTap,
     bool? onTapAlwaysCalled,
     void Function(PointerDownEvent)? onTapOutside,
@@ -362,7 +353,6 @@ final class TextFormFieldConfiguration {
     void Function()? onEditingComplete,
     void Function(String)? onFieldSubmitted,
     void Function(String?)? onSaved,
-    String? Function(String?)? validator,
     Widget Function(BuildContext, String)? errorBuilder,
     List<TextInputFormatter>? inputFormatters,
     bool? enabled,
@@ -437,7 +427,6 @@ final class TextFormFieldConfiguration {
       minLines: minLines ?? this.minLines,
       expands: expands ?? this.expands,
       maxLength: maxLength ?? this.maxLength,
-      onChanged: onChanged ?? this.onChanged,
       onTap: onTap ?? this.onTap,
       onTapAlwaysCalled: onTapAlwaysCalled ?? this.onTapAlwaysCalled,
       onTapOutside: onTapOutside ?? this.onTapOutside,
@@ -445,7 +434,6 @@ final class TextFormFieldConfiguration {
       onEditingComplete: onEditingComplete ?? this.onEditingComplete,
       onFieldSubmitted: onFieldSubmitted ?? this.onFieldSubmitted,
       onSaved: onSaved ?? this.onSaved,
-      validator: validator ?? this.validator,
       errorBuilder: errorBuilder ?? this.errorBuilder,
       inputFormatters: inputFormatters ?? this.inputFormatters,
       enabled: enabled ?? this.enabled,

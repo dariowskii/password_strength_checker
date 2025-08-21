@@ -11,5 +11,3 @@ export 'src/config/password_generator_configuration.dart';
 export 'src/dict/common_passwords.dart';
 // Enums
 export 'src/enum/password_strength_enum.dart';
-// Extensions
-export 'src/extensions/text_form_field_extension.dart';

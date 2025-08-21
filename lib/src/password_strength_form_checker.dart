@@ -149,40 +149,36 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
     return Column(
       children: [
         if (widget.topInstructions != null) widget.topInstructions!,
-        TextFormField().fromConfig(
-          configuration: widget.textFormFieldConfiguration.copyWith(
-            onChanged: (value) => widget.onChanged(value, _passNotifier),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return widget.hideErrorMessage
-                    ? ''
-                    : widget.emptyTextErrorMessage;
-              }
-              final strength = _passNotifier.value!;
-              if (strength.index < widget.minimumStrengthRequired.index) {
-                return widget.hideErrorMessage ? '' : widget.errorMessage;
-              }
-              return null;
-            },
-          ),
+        _TextFormField(
+          configuration: widget.textFormFieldConfiguration,
+          onChanged: (value) => widget.onChanged(value, _passNotifier),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return widget.hideErrorMessage
+                  ? ''
+                  : widget.emptyTextErrorMessage;
+            }
+            final strength = _passNotifier.value!;
+            if (strength.index < widget.minimumStrengthRequired.index) {
+              return widget.hideErrorMessage ? '' : widget.errorMessage;
+            }
+            return null;
+          },
         ),
         if (widget.needConfirmation &&
             widget.textFormFieldConfiguration.controller != null) ...[
           const SizedBox(height: 10),
-          TextFormField().fromConfig(
-            configuration:
-                widget.confirmationTextFormFieldConfiguration.copyWith(
-              validator: (value) {
-                if (value == null ||
-                    (value.isEmpty &&
-                        !widget.hideConfirmationErrorMessageWhenEmpty) ||
-                    value !=
-                        widget.textFormFieldConfiguration.controller!.text) {
-                  return widget.confirmationErrorMessage;
-                }
-                return null;
-              },
-            ),
+          _TextFormField(
+            configuration: widget.confirmationTextFormFieldConfiguration,
+            validator: (value) {
+              if (value == null ||
+                  (value.isEmpty &&
+                      !widget.hideConfirmationErrorMessageWhenEmpty) ||
+                  value != widget.textFormFieldConfiguration.controller!.text) {
+                return widget.confirmationErrorMessage;
+              }
+              return null;
+            },
           ),
         ],
         const SizedBox(height: 20),
@@ -215,4 +211,90 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
       ],
     );
   }
+}
+
+class _TextFormField extends TextFormField {
+  _TextFormField(
+      {required this.configuration, super.onChanged, super.validator})
+      : super(
+          key: configuration.key,
+          groupId: configuration.groupId,
+          controller: configuration.controller,
+          initialValue: configuration.initialValue,
+          focusNode: configuration.focusNode,
+          forceErrorText: configuration.forceErrorText,
+          decoration: configuration.decoration,
+          keyboardType: configuration.keyboardType,
+          textCapitalization: configuration.textCapitalization,
+          textInputAction: configuration.textInputAction,
+          style: configuration.style,
+          strutStyle: configuration.strutStyle,
+          textDirection: configuration.textDirection,
+          textAlign: configuration.textAlign,
+          textAlignVertical: configuration.textAlignVertical,
+          autofocus: configuration.autofocus,
+          readOnly: configuration.readOnly,
+          toolbarOptions: configuration.toolbarOptions,
+          showCursor: configuration.showCursor,
+          obscuringCharacter: configuration.obscuringCharacter,
+          obscureText: configuration.obscureText,
+          autocorrect: configuration.autocorrect,
+          smartDashesType: configuration.smartDashesType,
+          smartQuotesType: configuration.smartQuotesType,
+          enableSuggestions: configuration.enableSuggestions,
+          maxLengthEnforcement: configuration.maxLengthEnforcement,
+          maxLines: configuration.maxLines,
+          minLines: configuration.minLines,
+          expands: configuration.expands,
+          maxLength: configuration.maxLength,
+          onTap: configuration.onTap,
+          onTapAlwaysCalled: configuration.onTapAlwaysCalled,
+          onTapOutside: configuration.onTapOutside,
+          onTapUpOutside: configuration.onTapUpOutside,
+          onEditingComplete: configuration.onEditingComplete,
+          onFieldSubmitted: configuration.onFieldSubmitted,
+          onSaved: configuration.onSaved,
+          errorBuilder: configuration.errorBuilder,
+          inputFormatters: configuration.inputFormatters,
+          enabled: configuration.enabled,
+          ignorePointers: configuration.ignorePointers,
+          cursorWidth: configuration.cursorWidth,
+          cursorHeight: configuration.cursorHeight,
+          cursorRadius: configuration.cursorRadius,
+          cursorColor: configuration.cursorColor,
+          cursorErrorColor: configuration.cursorErrorColor,
+          keyboardAppearance: configuration.keyboardAppearance,
+          scrollPadding: configuration.scrollPadding,
+          enableInteractiveSelection: configuration.enableInteractiveSelection,
+          selectAllOnFocus: configuration.selectAllOnFocus,
+          selectionControls: configuration.selectionControls,
+          buildCounter: configuration.buildCounter,
+          scrollPhysics: configuration.scrollPhysics,
+          autofillHints: configuration.autofillHints,
+          autovalidateMode: configuration.autovalidateMode,
+          scrollController: configuration.scrollController,
+          restorationId: configuration.restorationId,
+          enableIMEPersonalizedLearning:
+              configuration.enableIMEPersonalizedLearning,
+          mouseCursor: configuration.mouseCursor,
+          contextMenuBuilder: configuration.contextMenuBuilder,
+          spellCheckConfiguration: configuration.spellCheckConfiguration,
+          magnifierConfiguration: configuration.magnifierConfiguration,
+          undoController: configuration.undoController,
+          onAppPrivateCommand: configuration.onAppPrivateCommand,
+          cursorOpacityAnimates: configuration.cursorOpacityAnimates,
+          selectionHeightStyle: configuration.selectionHeightStyle,
+          selectionWidthStyle: configuration.selectionWidthStyle,
+          dragStartBehavior: configuration.dragStartBehavior,
+          contentInsertionConfiguration:
+              configuration.contentInsertionConfiguration,
+          statesController: configuration.statesController,
+          clipBehavior: configuration.clipBehavior,
+          scribbleEnabled: configuration.scribbleEnabled,
+          stylusHandwritingEnabled: configuration.stylusHandwritingEnabled,
+          canRequestFocus: configuration.canRequestFocus,
+          hintLocales: configuration.hintLocales,
+        );
+
+  final TextFormFieldConfiguration configuration;
 }
