@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// The configuration for the [PasswordStrengthChecker] widget.
-class PasswordStrengthCheckerConfiguration {
+final class PasswordStrengthCheckerConfiguration {
   /// The width of the widget.
   final double width;
 
