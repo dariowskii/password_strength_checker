@@ -20,6 +20,6 @@ dev_dependencies:
 
 screenshots:
   - description: Simple use of PasswordStrengthChecker
-    path: assets/demo.gif
+    path: screenshots/demo.gif
   - description: Generate Secure password
-    path: assets/demo_generator.gif
+    path: screenshots/demo_generator.gif
