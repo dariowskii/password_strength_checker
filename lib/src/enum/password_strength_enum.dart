@@ -5,7 +5,7 @@ import '../dict/common_passwords.dart';
 const int kDefaultStrengthLength = 12;
 
 /// The abstract class for the password strength enum.
-abstract class PasswordStrengthItem extends Enum {
+abstract class PasswordStrengthItem implements Enum {
   /// The color for every status.
   Color get statusColor;
 
