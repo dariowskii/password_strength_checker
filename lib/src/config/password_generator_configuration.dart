@@ -76,4 +76,36 @@ class PasswordGeneratorConfiguration {
           useSpecialChars || useDigits || useLowercase || useUppercase,
           'At least one of the useSpecialChars, useDigits, useLowercase or useUppercase must be true',
         );
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is PasswordGeneratorConfiguration &&
+        length == other.length &&
+        minLowercase == other.minLowercase &&
+        minUppercase == other.minUppercase &&
+        minDigits == other.minDigits &&
+        minSpecial == other.minSpecial &&
+        specialChars.length == other.specialChars.length &&
+        specialChars.every((c) => other.specialChars.contains(c)) &&
+        useSpecialChars == other.useSpecialChars &&
+        useDigits == other.useDigits &&
+        useLowercase == other.useLowercase &&
+        useUppercase == other.useUppercase &&
+        numberOfShuffles == other.numberOfShuffles;
+  }
+
+  @override
+  int get hashCode =>
+      length.hashCode ^
+      minLowercase.hashCode ^
+      minUppercase.hashCode ^
+      minDigits.hashCode ^
+      minSpecial.hashCode ^
+      specialChars.fold(0, (prev, c) => prev ^ c.hashCode) ^
+      useSpecialChars.hashCode ^
+      useDigits.hashCode ^
+      useLowercase.hashCode ^
+      useUppercase.hashCode ^
+      numberOfShuffles.hashCode;
 }
