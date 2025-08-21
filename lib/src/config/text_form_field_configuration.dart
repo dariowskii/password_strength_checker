@@ -256,7 +256,7 @@ final class TextFormFieldConfiguration {
     this.toolbarOptions,
     this.showCursor,
     this.obscuringCharacter = '•',
-    this.obscureText = false,
+    this.obscureText = true,
     this.autocorrect = true,
     this.smartDashesType,
     this.smartQuotesType,
