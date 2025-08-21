@@ -7,7 +7,7 @@ homepage: https://github.com/dariowskii/password_strength_checker
 repository: https://github.com/dariowskii/password_strength_checker
 
 environment:
-  sdk: '>=3.9.0'
+  sdk: '>=3.9.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -21,5 +21,7 @@ dev_dependencies:
 screenshots:
   - description: Simple use of PasswordStrengthChecker
     path: screenshots/demo.gif
+  - description: PasswordStrengthFormChecker with validation
+    path: screenshots/demo_form.gif
   - description: Generate Secure password
     path: screenshots/demo_generator.gif
