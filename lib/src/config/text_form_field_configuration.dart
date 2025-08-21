@@ -1,180 +1,254 @@
+import 'dart:ui' show BoxHeightStyle, BoxWidthStyle;
+
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Helper class that contains the [TextFormField] configuration.
-class TextFormFieldConfiguration {
-  /// The TextFormField key.
+final class TextFormFieldConfiguration {
+  /// The widget key.
   final Key? key;
 
-  /// The TextFormField controller.
+  /// The group ID for the text field.
+  final Object groupId;
+
+  /// The controller for the text field.
   final TextEditingController? controller;
 
-  /// The TextFormField initialValue.
+  /// The initial value of the text field.
   final String? initialValue;
 
-  /// The TextFormField validator.
-  final String? Function(String?)? validator;
-
-  /// The TextFormField onChanged callback.
-  final Function(String)? onChanged;
-
-  /// The TextFormField decoration.
-  final InputDecoration? decoration;
-
-  /// The TextFormField focusNode.
+  /// The focus node for the text field.
   final FocusNode? focusNode;
 
-  /// The TextFormField keyboardType.
+  /// The error text to force display.
+  final String? forceErrorText;
+
+  /// The decoration for the text field.
+  final InputDecoration? decoration;
+
+  /// The keyboard type for the text field.
   final TextInputType? keyboardType;
 
-  /// The TextFormField textInputAction.
-  final TextInputAction? textInputAction;
-
-  /// The TextFormField textCapitalization.
+  /// The text capitalization strategy.
   final TextCapitalization textCapitalization;
 
-  /// The TextFormField style.
+  /// The action button on the keyboard.
+  final TextInputAction? textInputAction;
+
+  /// The style to use for the text being edited.
   final TextStyle? style;
 
-  /// The TextFormField strutStyle.
+  /// The strut style for the text field.
   final StrutStyle? strutStyle;
 
-  /// The TextFormField textAlign.
-  final TextAlign textAlign;
-
-  /// The TextFormField textDirection.
+  /// The text direction for the text field.
   final TextDirection? textDirection;
 
-  /// The TextFormField textAlignVertical.
+  /// How the text should be aligned horizontally.
+  final TextAlign textAlign;
+
+  /// How the text should be aligned vertically.
   final TextAlignVertical? textAlignVertical;
 
-  /// The TextFormField autofocus.
+  /// Whether the text field should focus itself if nothing else is already focused.
   final bool autofocus;
 
-  /// The TextFormField readOnly.
+  /// Whether the text field is read-only.
   final bool readOnly;
 
-  /// The TextFormField contextMenuBuilder.
-  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
+  /// Toolbar options for the text field.
+  final ToolbarOptions? toolbarOptions;
 
-  /// The TextFormField showCursor.
+  /// Whether to show the cursor.
   final bool? showCursor;
 
-  /// The TextFormField obscuringCharacter.
+  /// The character used for obscuring text if obscureText is true.
   final String obscuringCharacter;
 
-  /// The TextFormField obscureText.
+  /// Whether to hide the text being edited (e.g. for passwords).
   final bool obscureText;
 
-  /// The TextFormField autocorrect.
+  /// Whether to enable autocorrect.
   final bool autocorrect;
 
-  /// The TextFormField smartDashesType.
+  /// The type of smart dashes to use.
   final SmartDashesType? smartDashesType;
 
-  /// The TextFormField smartQuotesType.
+  /// The type of smart quotes to use.
   final SmartQuotesType? smartQuotesType;
 
-  /// The TextFormField enableSuggestions.
+  /// Whether to enable suggestions.
   final bool enableSuggestions;
 
-  /// The TextFormField maxLines.
-  final int? maxLines;
-
-  /// The TextFormField minLines.
-  final int? minLines;
-
-  /// The TextFormField maxLengthEnforcement.
+  /// The enforcement of the max length limit.
   final MaxLengthEnforcement? maxLengthEnforcement;
 
-  /// The TextFormField expands.
+  /// The maximum number of lines for the text field.
+  final int? maxLines;
+
+  /// The minimum number of lines for the text field.
+  final int? minLines;
+
+  /// Whether the text field expands to fill its parent.
   final bool expands;
 
-  /// The TextFormField maxLength.
+  /// The maximum length of the text field.
   final int? maxLength;
 
-  /// The TextFormField onTap.
+  /// Called when the text changes.
+  final void Function(String)? onChanged;
+
+  /// Called when the text field is tapped.
   final void Function()? onTap;
 
-  /// The TextFormField onEditingComplete.
+  /// Whether onTap is always called.
+  final bool onTapAlwaysCalled;
+
+  /// Called when a pointer that might cause a tap with a primary button has contacted the screen.
+  final void Function(PointerDownEvent)? onTapOutside;
+
+  /// Called when a pointer that might cause a tap with a primary button has stopped contacting the screen.
+  final void Function(PointerUpEvent)? onTapUpOutside;
+
+  /// Called when editing is complete.
   final void Function()? onEditingComplete;
 
-  /// The TextFormField onFieldSubmitted.
+  /// Called when the user indicates that they are done editing the text in the field.
   final void Function(String)? onFieldSubmitted;
 
-  /// The TextFormField onSaved.
+  /// Called when the text field should save its current value.
   final void Function(String?)? onSaved;
 
-  /// The TextFormField inputFormatters.
+  /// The validation logic for the text field.
+  final String? Function(String?)? validator;
+
+  /// The error builder for the text field.
+  final Widget Function(BuildContext, String)? errorBuilder;
+
+  /// The list of input formatters to apply to the text field.
   final List<TextInputFormatter>? inputFormatters;
 
-  /// The TextFormField enabled.
+  /// Whether the text field is enabled.
   final bool? enabled;
 
-  /// The TextFormField cursorWidth.
+  /// Whether to ignore pointer events.
+  final bool? ignorePointers;
+
+  /// The width of the cursor.
   final double cursorWidth;
 
-  /// The TextFormField cursorHeight.
+  /// The height of the cursor.
   final double? cursorHeight;
 
-  /// The TextFormField cursorRadius.
+  /// The radius of the cursor.
   final Radius? cursorRadius;
 
-  /// The TextFormField cursorColor.
+  /// The color of the cursor.
   final Color? cursorColor;
 
-  /// The TextFormField keyboardAppearance.
+  /// The color of the cursor when in error state.
+  final Color? cursorErrorColor;
+
+  /// The appearance of the keyboard.
   final Brightness? keyboardAppearance;
 
-  /// The TextFormField scrollPadding.
+  /// The amount of space by which to inset the text field.
   final EdgeInsets scrollPadding;
 
-  /// The TextFormField enableInteractiveSelection.
+  /// Whether interactive selection is enabled for the text field.
   final bool? enableInteractiveSelection;
 
-  /// The TextFormField selectionControls.
+  /// Whether to select all text on focus.
+  final bool? selectAllOnFocus;
+
+  /// The selection controls for the text field.
   final TextSelectionControls? selectionControls;
 
-  /// The TextFormField buildCounter.
+  /// The build counter widget for the text field.
   final Widget? Function(BuildContext,
       {required int currentLength,
       required bool isFocused,
       required int? maxLength})? buildCounter;
 
-  /// The TextFormField scrollPhysics.
+  /// The scroll physics for the text field.
   final ScrollPhysics? scrollPhysics;
 
-  /// The TextFormField autofillHints.
+  /// The autofill hints for the text field.
   final Iterable<String>? autofillHints;
 
-  /// The TextFormField autovalidateMode.
+  /// The auto validation mode for the text field.
   final AutovalidateMode? autovalidateMode;
 
-  /// The TextFormField restorationId.
-  final String? restorationId;
-
-  /// The TextFormField scrollController.
+  /// The scroll controller for the text field.
   final ScrollController? scrollController;
 
-  /// The TextFormField enableIMEPersonalizedLearning.
+  /// The restoration ID for the text field.
+  final String? restorationId;
+
+  /// Whether to enable IME personalized learning.
   final bool enableIMEPersonalizedLearning;
 
-  /// The TextFormField mouseCursor.
+  /// The mouse cursor for the text field.
   final MouseCursor? mouseCursor;
+
+  /// The context menu builder for the text field.
+  final Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
+
+  /// The spell check configuration for the text field.
+  final SpellCheckConfiguration? spellCheckConfiguration;
+
+  /// The text magnifier configuration for the text field.
+  final TextMagnifierConfiguration? magnifierConfiguration;
+
+  /// The undo history controller for the text field.
+  final UndoHistoryController? undoController;
+
+  /// Called when an app private command is received.
+  final void Function(String, Map<String, dynamic>)? onAppPrivateCommand;
+
+  /// Whether the cursor opacity animates.
+  final bool? cursorOpacityAnimates;
+
+  /// The selection height style.
+  final BoxHeightStyle? selectionHeightStyle;
+
+  /// The selection width style.
+  final BoxWidthStyle? selectionWidthStyle;
+
+  /// The drag start behavior for the text field.
+  final DragStartBehavior dragStartBehavior;
+
+  /// The content insertion configuration for the text field.
+  final ContentInsertionConfiguration? contentInsertionConfiguration;
+
+  /// The widget states controller for the text field.
+  final WidgetStatesController? statesController;
+
+  /// The clip behavior for the text field.
+  final Clip clipBehavior;
+
+  /// Whether scribble is enabled for the text field.
+  final bool scribbleEnabled;
+
+  /// Whether stylus handwriting is enabled for the text field.
+  final bool stylusHandwritingEnabled;
+
+  /// Whether the text field can request focus.
+  final bool canRequestFocus;
+
+  /// The list of hint locales for the text field.
+  final List<Locale>? hintLocales;
 
   /// Creates a [TextFormFieldConfiguration] with the specified parameters.
   const TextFormFieldConfiguration({
     this.key,
+    this.groupId = EditableText,
     this.controller,
     this.initialValue,
-    this.validator,
-    this.onChanged,
     this.focusNode,
-    this.decoration = const InputDecoration(
-      errorStyle: TextStyle(height: 0),
-      border: OutlineInputBorder(),
-      labelText: 'Password',
-    ),
+    this.forceErrorText,
+    this.decoration = const InputDecoration(),
     this.keyboardType,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
@@ -185,10 +259,10 @@ class TextFormFieldConfiguration {
     this.textAlignVertical,
     this.autofocus = false,
     this.readOnly = false,
-    this.contextMenuBuilder,
+    this.toolbarOptions,
     this.showCursor,
     this.obscuringCharacter = '•',
-    this.obscureText = true,
+    this.obscureText = false,
     this.autocorrect = true,
     this.smartDashesType,
     this.smartQuotesType,
@@ -198,19 +272,28 @@ class TextFormFieldConfiguration {
     this.minLines,
     this.expands = false,
     this.maxLength,
+    this.onChanged,
     this.onTap,
+    this.onTapAlwaysCalled = false,
+    this.onTapOutside,
+    this.onTapUpOutside,
     this.onEditingComplete,
     this.onFieldSubmitted,
     this.onSaved,
+    this.validator,
+    this.errorBuilder,
     this.inputFormatters,
     this.enabled,
+    this.ignorePointers,
     this.cursorWidth = 2.0,
     this.cursorHeight,
     this.cursorRadius,
     this.cursorColor,
+    this.cursorErrorColor,
     this.keyboardAppearance,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.enableInteractiveSelection,
+    this.selectAllOnFocus,
     this.selectionControls,
     this.buildCounter,
     this.scrollPhysics,
@@ -220,28 +303,45 @@ class TextFormFieldConfiguration {
     this.restorationId,
     this.enableIMEPersonalizedLearning = true,
     this.mouseCursor,
+    this.contextMenuBuilder,
+    this.spellCheckConfiguration,
+    this.magnifierConfiguration,
+    this.undoController,
+    this.onAppPrivateCommand,
+    this.cursorOpacityAnimates,
+    this.selectionHeightStyle,
+    this.selectionWidthStyle,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.contentInsertionConfiguration,
+    this.statesController,
+    this.clipBehavior = Clip.hardEdge,
+    this.scribbleEnabled = true,
+    this.stylusHandwritingEnabled =
+        EditableText.defaultStylusHandwritingEnabled,
+    this.canRequestFocus = true,
+    this.hintLocales,
   });
 
   /// Creates a copy of the [TextFormFieldConfiguration] with the given parameters.
   TextFormFieldConfiguration copyWith({
     Key? key,
+    Object? groupId,
     TextEditingController? controller,
     String? initialValue,
-    String? Function(String?)? validator,
-    void Function(String)? onChanged,
     FocusNode? focusNode,
+    String? forceErrorText,
     InputDecoration? decoration,
     TextInputType? keyboardType,
-    TextInputAction? textInputAction,
     TextCapitalization? textCapitalization,
+    TextInputAction? textInputAction,
     TextStyle? style,
     StrutStyle? strutStyle,
-    TextAlign? textAlign,
     TextDirection? textDirection,
+    TextAlign? textAlign,
     TextAlignVertical? textAlignVertical,
     bool? autofocus,
     bool? readOnly,
-    Widget Function(BuildContext, EditableTextState)? contextMenuBuilder,
+    ToolbarOptions? toolbarOptions,
     bool? showCursor,
     String? obscuringCharacter,
     bool? obscureText,
@@ -249,24 +349,33 @@ class TextFormFieldConfiguration {
     SmartDashesType? smartDashesType,
     SmartQuotesType? smartQuotesType,
     bool? enableSuggestions,
+    MaxLengthEnforcement? maxLengthEnforcement,
     int? maxLines,
     int? minLines,
-    MaxLengthEnforcement? maxLengthEnforcement,
     bool? expands,
     int? maxLength,
+    void Function(String)? onChanged,
     void Function()? onTap,
+    bool? onTapAlwaysCalled,
+    void Function(PointerDownEvent)? onTapOutside,
+    void Function(PointerUpEvent)? onTapUpOutside,
     void Function()? onEditingComplete,
     void Function(String)? onFieldSubmitted,
     void Function(String?)? onSaved,
+    String? Function(String?)? validator,
+    Widget Function(BuildContext, String)? errorBuilder,
     List<TextInputFormatter>? inputFormatters,
     bool? enabled,
+    bool? ignorePointers,
     double? cursorWidth,
     double? cursorHeight,
     Radius? cursorRadius,
     Color? cursorColor,
+    Color? cursorErrorColor,
     Brightness? keyboardAppearance,
     EdgeInsets? scrollPadding,
     bool? enableInteractiveSelection,
+    bool? selectAllOnFocus,
     TextSelectionControls? selectionControls,
     Widget? Function(BuildContext,
             {required int currentLength,
@@ -276,30 +385,46 @@ class TextFormFieldConfiguration {
     ScrollPhysics? scrollPhysics,
     Iterable<String>? autofillHints,
     AutovalidateMode? autovalidateMode,
-    String? restorationId,
     ScrollController? scrollController,
+    String? restorationId,
     bool? enableIMEPersonalizedLearning,
     MouseCursor? mouseCursor,
+    Widget Function(BuildContext, EditableTextState)? contextMenuBuilder,
+    SpellCheckConfiguration? spellCheckConfiguration,
+    TextMagnifierConfiguration? magnifierConfiguration,
+    UndoHistoryController? undoController,
+    void Function(String, Map<String, dynamic>)? onAppPrivateCommand,
+    bool? cursorOpacityAnimates,
+    BoxHeightStyle? selectionHeightStyle,
+    BoxWidthStyle? selectionWidthStyle,
+    DragStartBehavior? dragStartBehavior,
+    ContentInsertionConfiguration? contentInsertionConfiguration,
+    WidgetStatesController? statesController,
+    Clip? clipBehavior,
+    bool? scribbleEnabled,
+    bool? stylusHandwritingEnabled,
+    bool? canRequestFocus,
+    List<Locale>? hintLocales,
   }) {
     return TextFormFieldConfiguration(
       key: key ?? this.key,
+      groupId: groupId ?? this.groupId,
       controller: controller ?? this.controller,
       initialValue: initialValue ?? this.initialValue,
-      validator: validator ?? this.validator,
-      onChanged: onChanged ?? this.onChanged,
       focusNode: focusNode ?? this.focusNode,
+      forceErrorText: forceErrorText ?? this.forceErrorText,
       decoration: decoration ?? this.decoration,
       keyboardType: keyboardType ?? this.keyboardType,
-      textInputAction: textInputAction ?? this.textInputAction,
       textCapitalization: textCapitalization ?? this.textCapitalization,
+      textInputAction: textInputAction ?? this.textInputAction,
       style: style ?? this.style,
       strutStyle: strutStyle ?? this.strutStyle,
-      textAlign: textAlign ?? this.textAlign,
       textDirection: textDirection ?? this.textDirection,
+      textAlign: textAlign ?? this.textAlign,
       textAlignVertical: textAlignVertical ?? this.textAlignVertical,
       autofocus: autofocus ?? this.autofocus,
       readOnly: readOnly ?? this.readOnly,
-      contextMenuBuilder: contextMenuBuilder ?? this.contextMenuBuilder,
+      toolbarOptions: toolbarOptions ?? this.toolbarOptions,
       showCursor: showCursor ?? this.showCursor,
       obscuringCharacter: obscuringCharacter ?? this.obscuringCharacter,
       obscureText: obscureText ?? this.obscureText,
@@ -312,30 +437,60 @@ class TextFormFieldConfiguration {
       minLines: minLines ?? this.minLines,
       expands: expands ?? this.expands,
       maxLength: maxLength ?? this.maxLength,
+      onChanged: onChanged ?? this.onChanged,
       onTap: onTap ?? this.onTap,
+      onTapAlwaysCalled: onTapAlwaysCalled ?? this.onTapAlwaysCalled,
+      onTapOutside: onTapOutside ?? this.onTapOutside,
+      onTapUpOutside: onTapUpOutside ?? this.onTapUpOutside,
       onEditingComplete: onEditingComplete ?? this.onEditingComplete,
       onFieldSubmitted: onFieldSubmitted ?? this.onFieldSubmitted,
       onSaved: onSaved ?? this.onSaved,
+      validator: validator ?? this.validator,
+      errorBuilder: errorBuilder ?? this.errorBuilder,
       inputFormatters: inputFormatters ?? this.inputFormatters,
       enabled: enabled ?? this.enabled,
+      ignorePointers: ignorePointers ?? this.ignorePointers,
       cursorWidth: cursorWidth ?? this.cursorWidth,
       cursorHeight: cursorHeight ?? this.cursorHeight,
       cursorRadius: cursorRadius ?? this.cursorRadius,
       cursorColor: cursorColor ?? this.cursorColor,
+      cursorErrorColor: cursorErrorColor ?? this.cursorErrorColor,
       keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
       scrollPadding: scrollPadding ?? this.scrollPadding,
       enableInteractiveSelection:
           enableInteractiveSelection ?? this.enableInteractiveSelection,
+      selectAllOnFocus: selectAllOnFocus ?? this.selectAllOnFocus,
       selectionControls: selectionControls ?? this.selectionControls,
       buildCounter: buildCounter ?? this.buildCounter,
       scrollPhysics: scrollPhysics ?? this.scrollPhysics,
       autofillHints: autofillHints ?? this.autofillHints,
       autovalidateMode: autovalidateMode ?? this.autovalidateMode,
-      restorationId: restorationId ?? this.restorationId,
       scrollController: scrollController ?? this.scrollController,
+      restorationId: restorationId ?? this.restorationId,
       enableIMEPersonalizedLearning:
           enableIMEPersonalizedLearning ?? this.enableIMEPersonalizedLearning,
       mouseCursor: mouseCursor ?? this.mouseCursor,
+      contextMenuBuilder: contextMenuBuilder ?? this.contextMenuBuilder,
+      spellCheckConfiguration:
+          spellCheckConfiguration ?? this.spellCheckConfiguration,
+      magnifierConfiguration:
+          magnifierConfiguration ?? this.magnifierConfiguration,
+      undoController: undoController ?? this.undoController,
+      onAppPrivateCommand: onAppPrivateCommand ?? this.onAppPrivateCommand,
+      cursorOpacityAnimates:
+          cursorOpacityAnimates ?? this.cursorOpacityAnimates,
+      selectionHeightStyle: selectionHeightStyle ?? this.selectionHeightStyle,
+      selectionWidthStyle: selectionWidthStyle ?? this.selectionWidthStyle,
+      dragStartBehavior: dragStartBehavior ?? this.dragStartBehavior,
+      contentInsertionConfiguration:
+          contentInsertionConfiguration ?? this.contentInsertionConfiguration,
+      statesController: statesController ?? this.statesController,
+      clipBehavior: clipBehavior ?? this.clipBehavior,
+      scribbleEnabled: scribbleEnabled ?? this.scribbleEnabled,
+      stylusHandwritingEnabled:
+          stylusHandwritingEnabled ?? this.stylusHandwritingEnabled,
+      canRequestFocus: canRequestFocus ?? this.canRequestFocus,
+      hintLocales: hintLocales ?? this.hintLocales,
     );
   }
 }
