@@ -21,8 +21,9 @@ import '../password_strength_checker.dart';
 /// ```
 class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     extends StatefulWidget {
+  /// Creates a [PasswordStrengthFormChecker] widget with the specified parameters.
   const PasswordStrengthFormChecker({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.minimumStrengthRequired,
     this.emptyTextErrorMessage = 'Password cannot be empty',
@@ -51,7 +52,7 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     this.generateButtonChild = const Text("Generate Password"),
     this.generateButtonSize = const Size(double.maxFinite, 48),
     this.automaticallyFillWithGeneratedPassword = true,
-  }) : super(key: key);
+  });
 
   /// The function that will be called when the text changes. You need to update the [ValueNotifier] to update the widget.
   final Function(String password, ValueNotifier<T?> strengthNotifier) onChanged;

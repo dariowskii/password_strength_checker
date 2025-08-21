@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../password_strength_checker.dart';
 
+/// Extension on [TextFormField] to create a [TextFormField] based on the
+/// [TextFormFieldConfiguration].
 extension FromConfig on TextFormField {
   /// Creates a [TextFormField] based on the [TextFormFieldConfiguration].
   TextFormField fromConfig(

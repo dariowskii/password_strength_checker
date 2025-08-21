@@ -4,11 +4,12 @@ import 'package:password_strength_checker/password_strength_checker.dart';
 /// The widget that shows the password strength.
 class PasswordStrengthChecker<T extends PasswordStrengthItem>
     extends StatelessWidget {
+  /// Creates a [PasswordStrengthChecker] widget with the specified configuration.
   const PasswordStrengthChecker({
-    Key? key,
+    super.key,
     required this.strength,
     this.configuration = const PasswordStrengthCheckerConfiguration(),
-  }) : super(key: key);
+  });
 
   /// The [ValueNotifier] that contains the [PasswordStrengthItem].
   final ValueNotifier<T?> strength;

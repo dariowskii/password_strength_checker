@@ -162,6 +162,7 @@ class TextFormFieldConfiguration {
   /// The TextFormField mouseCursor.
   final MouseCursor? mouseCursor;
 
+  /// Creates a [TextFormFieldConfiguration] with the specified parameters.
   const TextFormFieldConfiguration({
     this.key,
     this.controller,
@@ -221,6 +222,7 @@ class TextFormFieldConfiguration {
     this.mouseCursor,
   });
 
+  /// Creates a copy of the [TextFormFieldConfiguration] with the given parameters.
   TextFormFieldConfiguration copyWith({
     Key? key,
     TextEditingController? controller,

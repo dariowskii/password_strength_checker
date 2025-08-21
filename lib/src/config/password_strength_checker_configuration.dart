@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// The configuration for the [PasswordStrengthChecker] widget.
 class PasswordStrengthCheckerConfiguration {
   /// The width of the widget.
   final double width;
@@ -43,6 +44,7 @@ class PasswordStrengthCheckerConfiguration {
   /// The internal border radius.
   final BorderRadiusGeometry? internalBorderRadius;
 
+  /// Creates a [PasswordStrengthCheckerConfiguration] with the specified parameters.
   const PasswordStrengthCheckerConfiguration({
     this.width = double.maxFinite,
     this.height = 20,

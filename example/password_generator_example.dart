@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_strength_checker/password_strength_checker.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:password_strength_checker/password_strength_checker.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({super.key});
 
   final _formKey = GlobalKey<FormState>();
 

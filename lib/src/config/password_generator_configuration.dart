@@ -35,6 +35,7 @@ class PasswordGeneratorConfiguration {
   /// The number of times to shuffle the password.
   final int numberOfShuffles;
 
+  /// Creates a [PasswordGeneratorConfiguration] with the specified parameters.
   const PasswordGeneratorConfiguration({
     this.length = defaultLength,
     this.minLowercase = defaultMinLowercase,

@@ -51,6 +51,7 @@ class PasswordGenerator {
         if (useUppercase) ...defaultUppercaseChars,
       ];
 
+  /// Creates a [PasswordGenerator] with the specified parameters.
   const PasswordGenerator({
     this.length = defaultLength,
     this.minLowercase = defaultMinLowercase,
