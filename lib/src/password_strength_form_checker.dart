@@ -55,7 +55,8 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
   });
 
   /// The function that will be called when the text changes. You need to update the [ValueNotifier] to update the widget.
-  final Function(String password, ValueNotifier<T?> strengthNotifier) onChanged;
+  final void Function(String password, ValueNotifier<T?> strengthNotifier)
+      onChanged;
 
   /// The minimum strength required to consider the password strong enough.
   final T minimumStrengthRequired;
