@@ -121,33 +121,44 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
 
 class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
     extends State<PasswordStrengthFormChecker<T>> {
-  final passNotifier = ValueNotifier<T?>(null);
+  late final _passNotifier = ValueNotifier<T?>(null);
+  late var _passwordGenerator = PasswordGenerator.fromConfig(
+    configuration: widget.passwordGeneratorConfiguration,
+  );
 
   @override
   void dispose() {
-    passNotifier.dispose();
+    _passNotifier.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final passwordGenerator = PasswordGenerator.fromConfig(
-      configuration: widget.passwordGeneratorConfiguration,
-    );
+  void didUpdateWidget(covariant PasswordStrengthFormChecker<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
+    if (oldWidget.passwordGeneratorConfiguration !=
+        widget.passwordGeneratorConfiguration) {
+      _passwordGenerator = PasswordGenerator.fromConfig(
+        configuration: widget.passwordGeneratorConfiguration,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         if (widget.topInstructions != null) widget.topInstructions!,
         TextFormField().fromConfig(
           configuration: widget.textFormFieldConfiguration.copyWith(
-            onChanged: (value) => widget.onChanged(value, passNotifier),
+            onChanged: (value) => widget.onChanged(value, _passNotifier),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return widget.hideErrorMessage
                     ? ''
                     : widget.emptyTextErrorMessage;
               }
-              final strength = passNotifier.value!;
+              final strength = _passNotifier.value!;
               if (strength.index < widget.minimumStrengthRequired.index) {
                 return widget.hideErrorMessage ? '' : widget.errorMessage;
               }
@@ -176,7 +187,7 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
         ],
         const SizedBox(height: 20),
         PasswordStrengthChecker(
-          strength: passNotifier,
+          strength: _passNotifier,
           configuration: widget.passwordStrengthCheckerConfiguration,
         ),
         if (widget.showGenerator) ...[
@@ -193,7 +204,7 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
                     ),
                   ),
               onPressed: () {
-                final password = passwordGenerator.generate();
+                final password = _passwordGenerator.generate();
 
                 if (widget.automaticallyFillWithGeneratedPassword) {
                   widget.textFormFieldConfiguration.controller?.text = password;
@@ -201,7 +212,7 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
                       ?.text = password;
                 }
 
-                widget.onPasswordGenerated?.call(password, passNotifier);
+                widget.onPasswordGenerated?.call(password, _passNotifier);
               },
               child: widget.generateButtonChild,
             ),
