@@ -1,7 +1,7 @@
 import '../password_generator/constants.dart';
 
 /// A configuration for a [PasswordGenerator].
-class PasswordGeneratorConfiguration {
+final class PasswordGeneratorConfiguration {
   /// The length of the password to generate.
   final int length;
 
