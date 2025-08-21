@@ -124,6 +124,12 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
   final passNotifier = ValueNotifier<T?>(null);
 
   @override
+  void dispose() {
+    passNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final passwordGenerator = PasswordGenerator.fromConfig(
       configuration: widget.passwordGeneratorConfiguration,
