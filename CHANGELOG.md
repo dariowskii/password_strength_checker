@@ -1,3 +1,5 @@
+## 1.3.1
+Updated docs.
 ## 1.3.0
 **Important**: Updated Dart SDK constraint to `>=3.9.0 <4.0.0`.
 - Updated with new Dart pattern matching syntax.

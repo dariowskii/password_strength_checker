@@ -16,9 +16,9 @@ Use it also inside a `Form` to get form validation!
 
 ## Demo
 
-![Demo Form Gif](./assets/demo_form.gif)
-![Demo Gif](./assets/demo.gif)
-![Demo Generator Gif](./assets/demo_generator.gif)
+![Demo Form Gif](./screenshots/demo_form.gif)
+![Demo Gif](./screenshots/demo.gif)
+![Demo Generator Gif](./screenshots/demo_generator.gif)
 
 ## Getting started
 
