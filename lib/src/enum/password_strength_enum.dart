@@ -27,47 +27,46 @@ enum PasswordStrength implements PasswordStrengthItem {
   /// The color for every status.
   @override
   Color get statusColor => switch (this) {
-        PasswordStrength.alreadyExposed =>
-          const Color.fromARGB(255, 158, 15, 5),
-        PasswordStrength.weak => Colors.red,
-        PasswordStrength.medium => Colors.orange,
-        PasswordStrength.strong => Colors.green,
-        PasswordStrength.secure => const Color(0xFF0B6C0E),
-      };
+    PasswordStrength.alreadyExposed => const Color.fromARGB(255, 158, 15, 5),
+    PasswordStrength.weak => Colors.red,
+    PasswordStrength.medium => Colors.orange,
+    PasswordStrength.strong => Colors.green,
+    PasswordStrength.secure => const Color(0xFF0B6C0E),
+  };
 
   /// The percentual width of every status.
   @override
   double get widthPerc => switch (this) {
-        PasswordStrength.alreadyExposed => 0.075,
-        PasswordStrength.weak => 0.15,
-        PasswordStrength.medium => 0.4,
-        PasswordStrength.strong => 0.75,
-        PasswordStrength.secure => 1.0,
-      };
+    PasswordStrength.alreadyExposed => 0.075,
+    PasswordStrength.weak => 0.15,
+    PasswordStrength.medium => 0.4,
+    PasswordStrength.strong => 0.75,
+    PasswordStrength.secure => 1.0,
+  };
 
   /// The widget to show for every status under the bar.
   @override
   Widget get statusWidget => switch (this) {
-        PasswordStrength.alreadyExposed => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Already exposed'),
-              const SizedBox(width: 5),
-              Icon(Icons.error, color: statusColor)
-            ],
-          ),
-        PasswordStrength.weak => const Text('Weak'),
-        PasswordStrength.medium => const Text('Medium'),
-        PasswordStrength.strong => const Text('Strong'),
-        PasswordStrength.secure => Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Secure'),
-              const SizedBox(width: 5),
-              Icon(Icons.check_circle, color: statusColor)
-            ],
-          ),
-      };
+    PasswordStrength.alreadyExposed => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Already exposed'),
+        const SizedBox(width: 5),
+        Icon(Icons.error, color: statusColor),
+      ],
+    ),
+    PasswordStrength.weak => const Text('Weak'),
+    PasswordStrength.medium => const Text('Medium'),
+    PasswordStrength.strong => const Text('Strong'),
+    PasswordStrength.secure => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Secure'),
+        const SizedBox(width: 5),
+        Icon(Icons.check_circle, color: statusColor),
+      ],
+    ),
+  };
 
   /// Returns the [PasswordStrength] from the [text] value.
   static PasswordStrength? calculate({required String text}) {

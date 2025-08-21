@@ -24,7 +24,7 @@ const List<String> defaultDigits = [
   '6',
   '7',
   '8',
-  '9'
+  '9',
 ];
 
 /// The default special characters.
@@ -72,7 +72,7 @@ const List<String> defaultLowercaseChars = [
   'w',
   'x',
   'y',
-  'z'
+  'z',
 ];
 
 /// The default uppercase characters.
@@ -102,5 +102,5 @@ const List<String> defaultUppercaseChars = [
   'W',
   'X',
   'Y',
-  'Z'
+  'Z',
 ];

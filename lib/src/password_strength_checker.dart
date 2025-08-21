@@ -38,7 +38,8 @@ class PasswordStrengthChecker<T extends PasswordStrengthItem>
                 borderRadius: configuration.externalBorderRadius,
                 border: configuration.hasBorder
                     ? Border.all(
-                        color: configuration.borderColor ??
+                        color:
+                            configuration.borderColor ??
                             currentStrength?.statusColor ??
                             configuration.inactiveBorderColor,
                         width: configuration.borderWidth,
@@ -52,7 +53,8 @@ class PasswordStrengthChecker<T extends PasswordStrengthItem>
                     child: AnimatedContainer(
                       duration: configuration.animationDuration,
                       curve: configuration.animationCurve,
-                      width: constraints.maxWidth *
+                      width:
+                          constraints.maxWidth *
                           (currentStrength?.widthPerc ?? 0),
                       decoration: BoxDecoration(
                         color: currentStrength?.statusColor,
@@ -68,11 +70,9 @@ class PasswordStrengthChecker<T extends PasswordStrengthItem>
                 margin: configuration.statusMargin,
                 child: Row(
                   mainAxisAlignment: configuration.statusWidgetAlignment,
-                  children: [
-                    statusWidget,
-                  ],
+                  children: [statusWidget],
                 ),
-              )
+              ),
             ],
           ],
         );

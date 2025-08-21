@@ -160,10 +160,13 @@ final class TextFormFieldConfiguration {
   final TextSelectionControls? selectionControls;
 
   /// The build counter widget for the text field.
-  final Widget? Function(BuildContext,
-      {required int currentLength,
-      required bool isFocused,
-      required int? maxLength})? buildCounter;
+  final Widget? Function(
+    BuildContext, {
+    required int currentLength,
+    required bool isFocused,
+    required int? maxLength,
+  })?
+  buildCounter;
 
   /// The scroll physics for the text field.
   final ScrollPhysics? scrollPhysics;
@@ -367,11 +370,13 @@ final class TextFormFieldConfiguration {
     bool? enableInteractiveSelection,
     bool? selectAllOnFocus,
     TextSelectionControls? selectionControls,
-    Widget? Function(BuildContext,
-            {required int currentLength,
-            required bool isFocused,
-            required int? maxLength})?
-        buildCounter,
+    Widget? Function(
+      BuildContext, {
+      required int currentLength,
+      required bool isFocused,
+      required int? maxLength,
+    })?
+    buildCounter,
     ScrollPhysics? scrollPhysics,
     Iterable<String>? autofillHints,
     AutovalidateMode? autovalidateMode,

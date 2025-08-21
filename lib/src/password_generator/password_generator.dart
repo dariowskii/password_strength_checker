@@ -45,11 +45,11 @@ class PasswordGenerator {
 
   /// A list of all the characters that can be used to generate the password.
   List<String> get allChars => [
-        if (useSpecialChars) ...specialChars,
-        if (useDigits) ...defaultDigits,
-        if (useLowercase) ...defaultLowercaseChars,
-        if (useUppercase) ...defaultUppercaseChars,
-      ];
+    if (useSpecialChars) ...specialChars,
+    if (useDigits) ...defaultDigits,
+    if (useLowercase) ...defaultLowercaseChars,
+    if (useUppercase) ...defaultUppercaseChars,
+  ];
 
   /// Creates a [PasswordGenerator] with the specified parameters.
   const PasswordGenerator({
@@ -64,42 +64,40 @@ class PasswordGenerator {
     this.useLowercase = true,
     this.useUppercase = true,
     this.numberOfShuffles = 1,
-  })  : assert(
-          length > 0,
-          'The length of the password must be greater than 0',
-        ),
-        assert(
-          length >= minLowercase + minUppercase + minDigits + minSpecial,
-          'The length of the password must be greater than or equal to the sum of the minimum number of lowercase, uppercase, digits and special characters',
-        ),
-        assert(
-          numberOfShuffles >= 1,
-          'The number of shuffles must be greater than or equal to 1',
-        ),
-        assert(
-          minLowercase >= 0,
-          'The minimum number of lowercase characters must be greater than or equal to 0',
-        ),
-        assert(
-          minUppercase >= 0,
-          'The minimum number of uppercase characters must be greater than or equal to 0',
-        ),
-        assert(
-          minDigits >= 0,
-          'The minimum number of digits must be greater than or equal to 0',
-        ),
-        assert(
-          minSpecial >= 0,
-          'The minimum number of special characters must be greater than or equal to 0',
-        ),
-        assert(
-          useSpecialChars || useDigits || useLowercase || useUppercase,
-          'At least one of the useSpecialChars, useDigits, useLowercase or useUppercase must be true',
-        );
+  }) : assert(length > 0, 'The length of the password must be greater than 0'),
+       assert(
+         length >= minLowercase + minUppercase + minDigits + minSpecial,
+         'The length of the password must be greater than or equal to the sum of the minimum number of lowercase, uppercase, digits and special characters',
+       ),
+       assert(
+         numberOfShuffles >= 1,
+         'The number of shuffles must be greater than or equal to 1',
+       ),
+       assert(
+         minLowercase >= 0,
+         'The minimum number of lowercase characters must be greater than or equal to 0',
+       ),
+       assert(
+         minUppercase >= 0,
+         'The minimum number of uppercase characters must be greater than or equal to 0',
+       ),
+       assert(
+         minDigits >= 0,
+         'The minimum number of digits must be greater than or equal to 0',
+       ),
+       assert(
+         minSpecial >= 0,
+         'The minimum number of special characters must be greater than or equal to 0',
+       ),
+       assert(
+         useSpecialChars || useDigits || useLowercase || useUppercase,
+         'At least one of the useSpecialChars, useDigits, useLowercase or useUppercase must be true',
+       );
 
   /// Return a [PasswordGenerator] based on the configuration.
-  factory PasswordGenerator.fromConfig(
-      {required PasswordGeneratorConfiguration configuration}) {
+  factory PasswordGenerator.fromConfig({
+    required PasswordGeneratorConfiguration configuration,
+  }) {
     return PasswordGenerator(
       length: configuration.length,
       minLowercase: configuration.minLowercase,
@@ -123,7 +121,8 @@ class PasswordGenerator {
       stopwatch = Stopwatch()..start();
       debugSeparator = '-' * 50;
       debugPrint(
-          '$debugSeparator\n$runtimeType: START GENERATING PASSWORD\n$debugSeparator');
+        '$debugSeparator\n$runtimeType: START GENERATING PASSWORD\n$debugSeparator',
+      );
     }
 
     final random = Random.secure();
@@ -145,22 +144,26 @@ class PasswordGenerator {
 
     if (printDebugInfo && minLowercase > 0) {
       debugPrint(
-          '$runtimeType: adding $minLowercase minimum lowercase characters...');
+        '$runtimeType: adding $minLowercase minimum lowercase characters...',
+      );
     }
 
     for (var i = 0; i < minLowercase; i++) {
-      buffer
-          .write(defaultLowercaseChars[random.nextInt(defaultLowercaseLength)]);
+      buffer.write(
+        defaultLowercaseChars[random.nextInt(defaultLowercaseLength)],
+      );
     }
 
     if (printDebugInfo && minUppercase > 0) {
       debugPrint(
-          '$runtimeType: adding $minUppercase minimum uppercase characters...');
+        '$runtimeType: adding $minUppercase minimum uppercase characters...',
+      );
     }
 
     for (var i = 0; i < minUppercase; i++) {
-      buffer
-          .write(defaultUppercaseChars[random.nextInt(defaultUppercaseLength)]);
+      buffer.write(
+        defaultUppercaseChars[random.nextInt(defaultUppercaseLength)],
+      );
     }
 
     if (printDebugInfo && minDigits > 0) {
@@ -173,7 +176,8 @@ class PasswordGenerator {
 
     if (printDebugInfo && minSpecial > 0) {
       debugPrint(
-          '$runtimeType: adding $minSpecial minimum special characters...');
+        '$runtimeType: adding $minSpecial minimum special characters...',
+      );
     }
 
     for (var i = 0; i < minSpecial; i++) {

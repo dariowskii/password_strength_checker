@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
                     border: const OutlineInputBorder(),
                     labelText: 'Password',
                     suffixIcon: IconButton(
-                      icon: Icon(_obscureText
-                          ? Icons.visibility
-                          : Icons.visibility_off),
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
                       onPressed: () {
                         setState(() {
                           _obscureText = !_obscureText;
