@@ -1,6 +1,3 @@
-/// [PasswordStrengthChecker] is a [Widget] that checks the strength of a password.
-library password_strength_checker;
-
 // UI
 export 'src/password_strength_checker.dart';
 export 'src/password_strength_form_checker.dart';

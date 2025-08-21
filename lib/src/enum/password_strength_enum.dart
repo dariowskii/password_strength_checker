@@ -26,70 +26,46 @@ enum PasswordStrength implements PasswordStrengthItem {
 
   /// The color for every status.
   @override
-  Color get statusColor {
-    switch (this) {
-      case PasswordStrength.alreadyExposed:
-        return const Color.fromARGB(255, 158, 15, 5);
-      case PasswordStrength.weak:
-        return Colors.red;
-      case PasswordStrength.medium:
-        return Colors.orange;
-      case PasswordStrength.strong:
-        return Colors.green;
-      case PasswordStrength.secure:
-        return const Color(0xFF0B6C0E);
-      default:
-        return Colors.red;
-    }
-  }
+  Color get statusColor => switch (this) {
+        PasswordStrength.alreadyExposed =>
+          const Color.fromARGB(255, 158, 15, 5),
+        PasswordStrength.weak => Colors.red,
+        PasswordStrength.medium => Colors.orange,
+        PasswordStrength.strong => Colors.green,
+        PasswordStrength.secure => const Color(0xFF0B6C0E),
+      };
 
   /// The percentual width of every status.
   @override
-  double get widthPerc {
-    switch (this) {
-      case PasswordStrength.alreadyExposed:
-        return 0.075;
-      case PasswordStrength.weak:
-        return 0.15;
-      case PasswordStrength.medium:
-        return 0.4;
-      case PasswordStrength.strong:
-        return 0.75;
-      case PasswordStrength.secure:
-        return 1.0;
-    }
-  }
+  double get widthPerc => switch (this) {
+        PasswordStrength.alreadyExposed => 0.075,
+        PasswordStrength.weak => 0.15,
+        PasswordStrength.medium => 0.4,
+        PasswordStrength.strong => 0.75,
+        PasswordStrength.secure => 1.0,
+      };
 
   /// The widget to show for every status under the bar.
   @override
-  Widget? get statusWidget {
-    switch (this) {
-      case PasswordStrength.alreadyExposed:
-        return Row(
-          children: [
-            const Text('Already exposed'),
-            const SizedBox(width: 5),
-            Icon(Icons.error, color: statusColor)
-          ],
-        );
-      case PasswordStrength.weak:
-        return const Text('Weak');
-      case PasswordStrength.medium:
-        return const Text('Medium');
-      case PasswordStrength.strong:
-        return const Text('Strong');
-      case PasswordStrength.secure:
-        return Row(
-          children: [
-            const Text('Secure'),
-            const SizedBox(width: 5),
-            Icon(Icons.check_circle, color: statusColor)
-          ],
-        );
-      default:
-        return null;
-    }
-  }
+  Widget get statusWidget => switch (this) {
+        PasswordStrength.alreadyExposed => Row(
+            children: [
+              const Text('Already exposed'),
+              const SizedBox(width: 5),
+              Icon(Icons.error, color: statusColor)
+            ],
+          ),
+        PasswordStrength.weak => const Text('Weak'),
+        PasswordStrength.medium => const Text('Medium'),
+        PasswordStrength.strong => const Text('Strong'),
+        PasswordStrength.secure => Row(
+            children: [
+              const Text('Secure'),
+              const SizedBox(width: 5),
+              Icon(Icons.check_circle, color: statusColor)
+            ],
+          ),
+      };
 
   /// Returns the [PasswordStrength] from the [text] value.
   static PasswordStrength? calculate({required String text}) {
@@ -111,18 +87,13 @@ enum PasswordStrength implements PasswordStrengthItem {
     if (text.contains(RegExp(r'[0-9]'))) counter++;
     if (text.contains(RegExp(r'[!@#\$%&*()?£\-_=]'))) counter++;
 
-    switch (counter) {
-      case 1:
-        return PasswordStrength.weak;
-      case 2:
-        return PasswordStrength.medium;
-      case 3:
-        return PasswordStrength.strong;
-      case 4:
-        return PasswordStrength.secure;
-      default:
-        return PasswordStrength.weak;
-    }
+    return switch (counter) {
+      1 => PasswordStrength.weak,
+      2 => PasswordStrength.medium,
+      3 => PasswordStrength.strong,
+      4 => PasswordStrength.secure,
+      _ => PasswordStrength.weak,
+    };
   }
 
   /// Instructions for the password strength.
