@@ -7,7 +7,7 @@ homepage: https://github.com/dariowskii/password_strength_checker
 repository: https://github.com/dariowskii/password_strength_checker
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.9.0'
 
 dependencies:
   flutter:
