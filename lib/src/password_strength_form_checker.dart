@@ -4,7 +4,9 @@ import 'config/password_generator_configuration.dart';
 import 'config/password_strength_checker_configuration.dart';
 import 'enum/password_strength_enum.dart';
 import 'password_generator/password_generator.dart';
+import 'password_requirements_checklist.dart';
 import 'password_strength_checker.dart';
+import 'rules/password_requirement.dart';
 
 /// Builds a custom password field for [PasswordStrengthFormChecker].
 typedef PasswordFieldBuilder =
@@ -75,6 +77,7 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     this.needConfirmation = false,
     this.passwordStrengthCheckerConfiguration =
         const PasswordStrengthCheckerConfiguration(),
+    this.requirements,
     this.showGenerator = false,
     this.passwordGeneratorConfiguration =
         const PasswordGeneratorConfiguration(),
@@ -144,6 +147,12 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
   /// The look and feel of the strength bar.
   final PasswordStrengthCheckerConfiguration
   passwordStrengthCheckerConfiguration;
+
+  /// Rules shown as a live checklist under the strength bar.
+  ///
+  /// `null` hides the checklist. Use [PasswordRequirement.defaults] for the
+  /// rules behind [PasswordStrength.secure].
+  final List<PasswordRequirement>? requirements;
 
   /// Whether to show a button that generates a password.
   final bool showGenerator;
@@ -302,6 +311,13 @@ class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
           strength: _strength,
           configuration: widget.passwordStrengthCheckerConfiguration,
         ),
+        if (widget.requirements case final requirements?) ...[
+          const SizedBox(height: 16),
+          PasswordRequirementsChecklist(
+            password: _controller,
+            requirements: requirements,
+          ),
+        ],
         if (widget.showGenerator) ...[
           const SizedBox(height: 20),
           FilledButton.tonal(

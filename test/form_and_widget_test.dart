@@ -20,11 +20,11 @@ void main() {
 
   test('unicode special characters count as special', () {
     expect(
-      PasswordStrength.calculate(text: 'aaaaaaaaM1€asd'),
+      PasswordStrength.calculate(text: 'gzmrtkWP7€xvq'),
       PasswordStrength.secure,
     );
     expect(
-      PasswordStrength.calculate(text: 'aaaaaaaaM1.asd'),
+      PasswordStrength.calculate(text: 'gzmrtkWP7.xvq'),
       PasswordStrength.secure,
     );
   });
@@ -66,7 +66,7 @@ void main() {
       tester,
     ) async {
       final formKey = GlobalKey<FormState>();
-      final controller = TextEditingController(text: 'aaaaaaaaM1@asd');
+      final controller = TextEditingController(text: 'gzmrtkWP7.xvq');
       addTearDown(controller.dispose);
 
       await tester.pumpWidget(
@@ -127,7 +127,7 @@ void main() {
 
     testWidgets('confirmation mismatch is invalid', (tester) async {
       final formKey = GlobalKey<FormState>();
-      final password = TextEditingController(text: 'aaaaaaaaM1@asd');
+      final password = TextEditingController(text: 'gzmrtkWP7.xvq');
       final confirmation = TextEditingController(text: 'different');
       addTearDown(password.dispose);
       addTearDown(confirmation.dispose);
@@ -171,7 +171,7 @@ void main() {
 
       await tester.pumpWidget(build(a));
       await tester.pumpWidget(build(b));
-      b.text = 'aaaaaaaaM1@asd';
+      b.text = 'gzmrtkWP7.xvq';
       await tester.pumpAndSettle();
       expect(find.text('Secure'), findsOneWidget);
 

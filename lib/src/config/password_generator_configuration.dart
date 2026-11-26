@@ -14,6 +14,7 @@ final class PasswordGeneratorConfiguration {
     this.useDigits = true,
     this.useLowercase = true,
     this.useUppercase = true,
+    this.excludeWeakPatterns = true,
   }) : assert(length > 0, 'length must be greater than 0'),
        assert(
          minLowercase >= 0 &&
@@ -65,6 +66,10 @@ final class PasswordGeneratorConfiguration {
   /// Whether uppercase characters can be used.
   final bool useUppercase;
 
+  /// Whether to regenerate passwords that contain a weak pattern such as
+  /// `aaaa`, `1234` or `qwer`. See `findWeakPatterns`.
+  final bool excludeWeakPatterns;
+
   /// Returns a copy of this configuration with the given fields replaced.
   PasswordGeneratorConfiguration copyWith({
     int? length,
@@ -77,6 +82,7 @@ final class PasswordGeneratorConfiguration {
     bool? useDigits,
     bool? useLowercase,
     bool? useUppercase,
+    bool? excludeWeakPatterns,
   }) => PasswordGeneratorConfiguration(
     length: length ?? this.length,
     minLowercase: minLowercase ?? this.minLowercase,
@@ -88,6 +94,7 @@ final class PasswordGeneratorConfiguration {
     useDigits: useDigits ?? this.useDigits,
     useLowercase: useLowercase ?? this.useLowercase,
     useUppercase: useUppercase ?? this.useUppercase,
+    excludeWeakPatterns: excludeWeakPatterns ?? this.excludeWeakPatterns,
   );
 
   @override
@@ -103,7 +110,8 @@ final class PasswordGeneratorConfiguration {
           useSpecialChars == other.useSpecialChars &&
           useDigits == other.useDigits &&
           useLowercase == other.useLowercase &&
-          useUppercase == other.useUppercase;
+          useUppercase == other.useUppercase &&
+          excludeWeakPatterns == other.excludeWeakPatterns;
 
   @override
   int get hashCode => Object.hash(
@@ -117,5 +125,6 @@ final class PasswordGeneratorConfiguration {
     useDigits,
     useLowercase,
     useUppercase,
+    excludeWeakPatterns,
   );
 }

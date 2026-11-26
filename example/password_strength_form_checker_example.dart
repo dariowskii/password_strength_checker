@@ -27,10 +27,7 @@ class _HomePageState extends State<HomePage> {
                 strengthCalculator: (text) =>
                     PasswordStrength.calculate(text: text),
                 needConfirmation: true,
-                topInstructions: Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Text(PasswordStrength.instructions),
-                ),
+                requirements: PasswordRequirement.defaults,
               ),
               const SizedBox(height: 20),
               FilledButton(

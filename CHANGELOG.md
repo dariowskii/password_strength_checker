@@ -15,7 +15,14 @@ A leaner, modern rewrite. See **Migrating from 1.x** in the README.
 - `PasswordStrengthChecker.strength` accepts any `ValueListenable`. `statusWidgetAlignment` is an `AlignmentGeometry`, and `inactiveBorderColor` defaults to the theme's `outlineVariant`.
 - Minimum Flutter version is 3.35.0.
 
+### Added
+- `PasswordRequirementsChecklist`: a live checklist of `PasswordRequirement`s, also available in `PasswordStrengthFormChecker` through `requirements`. Ships with `PasswordRequirement.defaults` and the `minLength`, `lowercase`, `uppercase`, `digit`, `special`, `notCommon` and `noWeakPatterns` factories, all with custom labels.
+- `findWeakPatterns()` and `effectivePasswordLength()`: they detect repeated characters, alphabetical and numerical sequences, and QWERTY/QWERTZ/AZERTY keyboard runs.
+- `PassphraseGenerator` and `PassphraseConfiguration`: memorable passphrases from the bundled EFF Short Wordlist 1 (`effShortWordlist`, CC BY 3.0), with optional capitalization and number, and `entropyBits`.
+- `PasswordGeneratorConfiguration.excludeWeakPatterns` (default `true`): the generator discards passwords that contain a weak pattern.
+
 ### Behavior
+- `PasswordStrength.calculate` counts each weak pattern as two characters toward the 12-character minimum, so passwords like `Aaaaaaaaaaa1!` or `Qwerty123456!x` are now `weak`.
 - Any character that is not a letter, a digit or whitespace now counts as a special character, Unicode included.
 - Accented and non-Latin letters count as lowercase/uppercase letters.
 - The leaked-password check is now case-insensitive.

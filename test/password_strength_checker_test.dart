@@ -26,17 +26,17 @@ void main() {
   });
 
   test('Calculate medium password', () {
-    final strength = PasswordStrength.calculate(text: 'aaaaaaaaMMMM');
+    final strength = PasswordStrength.calculate(text: 'gzmrtkwpXQVL');
     expect(strength, PasswordStrength.medium);
   });
 
   test('Calculate strong password', () {
-    final strength = PasswordStrength.calculate(text: 'aaaaaaaaM1111');
+    final strength = PasswordStrength.calculate(text: 'gzmrtkwpXQ739');
     expect(strength, PasswordStrength.strong);
   });
 
   test('Calculate secure password', () {
-    final strength = PasswordStrength.calculate(text: 'aaaaaaaaM1@asd');
+    final strength = PasswordStrength.calculate(text: 'k7#Vq9!mRz2@Lp');
     expect(strength, PasswordStrength.secure);
   });
 

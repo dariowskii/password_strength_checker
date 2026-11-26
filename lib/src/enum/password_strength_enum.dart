@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../dict/common_passwords.dart';
+import '../rules/character_classes.dart';
+import '../rules/weak_patterns.dart';
 
 /// The minimum length a password needs to be rated above
 /// [PasswordStrength.weak].
@@ -27,7 +29,8 @@ enum PasswordStrength implements PasswordStrengthItem {
   /// The password is in the [commonPasswords] list.
   alreadyExposed,
 
-  /// Shorter than [kDefaultStrengthLength] or with a single character class.
+  /// Shorter than [kDefaultStrengthLength] (see [effectivePasswordLength])
+  /// or with a single character class.
   weak,
 
   /// Contains two character classes.
@@ -38,11 +41,6 @@ enum PasswordStrength implements PasswordStrengthItem {
 
   /// Contains lowercase, uppercase, digits and special characters.
   secure;
-
-  static final _lowercase = RegExp(r'\p{Ll}', unicode: true);
-  static final _uppercase = RegExp(r'\p{Lu}', unicode: true);
-  static final _digit = RegExp(r'\p{N}', unicode: true);
-  static final _special = RegExp(r'[^\p{L}\p{N}\s]', unicode: true);
 
   @override
   Color get statusColor => switch (this) {
@@ -81,16 +79,19 @@ enum PasswordStrength implements PasswordStrengthItem {
   );
 
   /// Returns the [PasswordStrength] of [text], or `null` if it is empty.
+  ///
+  /// Weak patterns such as `aaaa`, `1234` or `qwer` count as two characters
+  /// toward the length, see [findWeakPatterns].
   static PasswordStrength? calculate({required String text}) {
     if (text.isEmpty) return null;
     if (isCommonPassword(text)) return alreadyExposed;
-    if (text.length < kDefaultStrengthLength) return weak;
+    if (effectivePasswordLength(text) < kDefaultStrengthLength) return weak;
 
     final classes = [
-      _lowercase,
-      _uppercase,
-      _digit,
-      _special,
+      lowercaseRegExp,
+      uppercaseRegExp,
+      digitRegExp,
+      specialRegExp,
     ].where(text.contains).length;
 
     return switch (classes) {

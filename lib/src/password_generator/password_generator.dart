@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../config/password_generator_configuration.dart';
+import '../rules/weak_patterns.dart';
 import 'constants.dart';
 
 /// Generates cryptographically secure random passwords.
@@ -20,9 +21,27 @@ class PasswordGenerator {
   final PasswordGeneratorConfiguration configuration;
 
   /// Returns a new random password built with [Random.secure].
+  ///
+  /// With [PasswordGeneratorConfiguration.excludeWeakPatterns], passwords
+  /// containing a weak pattern are discarded and generated again.
   String generate() {
-    final c = configuration;
     final random = Random.secure();
+    var password = _build(random);
+    if (!configuration.excludeWeakPatterns) return password;
+    for (
+      var i = 0;
+      i < _maxAttempts && findWeakPatterns(password).isNotEmpty;
+      i++
+    ) {
+      password = _build(random);
+    }
+    return password;
+  }
+
+  static const _maxAttempts = 100;
+
+  String _build(Random random) {
+    final c = configuration;
     final chars = <String>[];
 
     // Split by runes so multi-unit characters (e.g. emoji) stay intact.

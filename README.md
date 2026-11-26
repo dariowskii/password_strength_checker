@@ -23,8 +23,11 @@
 |---|---|
 | 📊 **`PasswordStrengthChecker`** | An animated bar that follows any `ValueListenable` of strength. Theme-aware (light and dark) and accessible. |
 | 📝 **`PasswordStrengthFormChecker`** | A drop-in `Form` field. It validates against a `minimumStrengthRequired` and can show a confirmation field and a generate button. |
+| ✅ **`PasswordRequirementsChecklist`** | A live checklist that ticks each rule (length, lowercase, symbol…) as the user types. Bring your own rules and labels. |
 | 🛡️ **`isCommonPassword`** | Checks a password against the 10,000 most common leaked passwords. The match is case-insensitive. |
-| 🎲 **`PasswordGenerator`** | Generates passwords with `Random.secure()` and per-class minimums. |
+| 🔁 **`findWeakPatterns`** | Detects repeats (`aaaa`), sequences (`1234`, `abcd`) and keyboard runs (`qwer`), which the default rating penalizes. |
+| 🎲 **`PasswordGenerator`** | Generates passwords with `Random.secure()` and per-class minimums, skipping weak patterns. |
+| 🗝️ **`PassphraseGenerator`** | Generates memorable passphrases from the EFF wordlist, with entropy reporting. |
 | 🎨 **Custom strength** | Implement `PasswordStrengthItem` on your own `enum` to define your own levels, colors and rules. |
 
 ## 🎬 Demo
@@ -57,6 +60,7 @@ Form(
     strengthCalculator: (text) => PasswordStrength.calculate(text: text),
     needConfirmation: true, // optional confirmation field
     showGenerator: true,    // optional "Generate password" button
+    requirements: PasswordRequirement.defaults, // optional live checklist
   ),
 );
 ```
@@ -103,6 +107,36 @@ final password = generator.generate();
 
 ➡️ [Full example](https://github.com/dariowskii/password_strength_checker/blob/master/example/password_generator_example.dart)
 
+### Requirements checklist
+
+Show which rules the password already meets, inside the form with `requirements:` or anywhere with the standalone widget:
+
+```dart
+PasswordRequirementsChecklist(
+  password: controller, // the TextEditingController of your field
+  requirements: [
+    PasswordRequirement.minLength(16, label: 'Almeno 16 caratteri'),
+    PasswordRequirement.uppercase(label: 'Una lettera maiuscola'),
+    PasswordRequirement.special(label: 'Un simbolo'),
+    PasswordRequirement.noWeakPatterns(),
+    PasswordRequirement('No spaces', (p) => p.isNotEmpty && !p.contains(' ')),
+  ],
+);
+```
+
+### Passphrase generator
+
+```dart
+const generator = PassphraseGenerator(
+  PassphraseConfiguration(wordCount: 6, capitalize: true, includeNumber: true),
+);
+
+generator.generate();  // e.g. "Acid-Brook-Flint7-Jolly-Crate-Oasis"
+generator.entropyBits; // ≈ 67.9
+```
+
+The default wordlist is the [EFF Short Wordlist 1](https://www.eff.org/dice) (1,296 words, about 10.3 bits per word). Pass `words:` to use your own.
+
 ### Leaked password check
 
 ```dart
@@ -117,7 +151,7 @@ commonPasswords.length;       // 10000
 | Level | Rule |
 |---|---|
 | `alreadyExposed` | The password is in the 10k leaked list. |
-| `weak` | Fewer than 12 characters, or only 1 character class. |
+| `weak` | Fewer than 12 characters, or only 1 character class. Weak patterns (`aaaa`, `1234`, `qwer`) count as 2 characters. |
 | `medium` | 2 character classes. |
 | `strong` | 3 character classes. |
 | `secure` | Lowercase + uppercase + digit + special character. |
@@ -183,7 +217,11 @@ The enum order is the strength order: a value declared later counts as stronger.
 | `statusWidgetAlignment: MainAxisAlignment.start` | `statusWidgetAlignment: AlignmentDirectional.centerStart` |
 | `inactiveBorderColor: Colors.black` (default) | `null` by default, which follows the theme's `outlineVariant`. |
 
-Behavior change: any character that is not a letter, a digit or whitespace now counts as special, accented letters count as letters, and the leaked-password check is case-insensitive. Some passwords can therefore get a different strength than in 1.x.
+Behavior change: any character that is not a letter, a digit or whitespace now counts as special, accented letters count as letters, the leaked-password check is case-insensitive, and weak patterns such as `aaaa`, `1234` or `qwer` count as only 2 characters toward the length. Some passwords can therefore get a different strength than in 1.x.
+
+## 📄 Credits
+
+The passphrase wordlist is the EFF Short Wordlist 1 by the [Electronic Frontier Foundation](https://www.eff.org/dice), licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/us/).
 
 ## 🤝 Contributing
 
