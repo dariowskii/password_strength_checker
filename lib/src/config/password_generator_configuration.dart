@@ -1,41 +1,8 @@
 import '../password_generator/constants.dart';
 
-/// A configuration for a [PasswordGenerator].
+/// The rules used by a [PasswordGenerator] to build a password.
 final class PasswordGeneratorConfiguration {
-  /// The length of the password to generate.
-  final int length;
-
-  /// The minimum number of lowercase characters to include in the password.
-  final int minLowercase;
-
-  /// The minimum number of uppercase characters to include in the password.
-  final int minUppercase;
-
-  /// The minimum number of digits to include in the password.
-  final int minDigits;
-
-  /// The minimum number of special characters to include in the password.
-  final int minSpecial;
-
-  /// The special characters to include in the password.
-  final List<String> specialChars;
-
-  /// Whether to include special characters in the password.
-  final bool useSpecialChars;
-
-  /// Whether to include digits in the password.
-  final bool useDigits;
-
-  /// Whether to include lowercase characters in the password.
-  final bool useLowercase;
-
-  /// Whether to include uppercase characters in the password.
-  final bool useUppercase;
-
-  /// The number of times to shuffle the password.
-  final int numberOfShuffles;
-
-  /// Creates a [PasswordGeneratorConfiguration] with the specified parameters.
+  /// Creates a [PasswordGeneratorConfiguration].
   const PasswordGeneratorConfiguration({
     this.length = defaultLength,
     this.minLowercase = defaultMinLowercase,
@@ -47,65 +14,108 @@ final class PasswordGeneratorConfiguration {
     this.useDigits = true,
     this.useLowercase = true,
     this.useUppercase = true,
-    this.numberOfShuffles = 1,
-  }) : assert(
+  }) : assert(length > 0, 'length must be greater than 0'),
+       assert(
+         minLowercase >= 0 &&
+             minUppercase >= 0 &&
+             minDigits >= 0 &&
+             minSpecial >= 0,
+         'Minimum counts must be greater than or equal to 0',
+       ),
+       assert(
          length >= minLowercase + minUppercase + minDigits + minSpecial,
-         'The length of the password must be greater than or equal to the sum of the minimum number of lowercase, uppercase, digits and special characters',
-       ),
-       assert(
-         numberOfShuffles >= 1,
-         'The number of shuffles must be greater than or equal to 1',
-       ),
-       assert(
-         minLowercase >= 0,
-         'The minimum number of lowercase characters must be greater than or equal to 0',
-       ),
-       assert(
-         minUppercase >= 0,
-         'The minimum number of uppercase characters must be greater than or equal to 0',
-       ),
-       assert(
-         minDigits >= 0,
-         'The minimum number of digits must be greater than or equal to 0',
-       ),
-       assert(
-         minSpecial >= 0,
-         'The minimum number of special characters must be greater than or equal to 0',
+         'length must be at least the sum of the minimum counts',
        ),
        assert(
          useSpecialChars || useDigits || useLowercase || useUppercase,
-         'At least one of the useSpecialChars, useDigits, useLowercase or useUppercase must be true',
+         'At least one character class must be enabled',
+       ),
+       assert(
+         !useSpecialChars || specialChars != '',
+         'specialChars cannot be empty when useSpecialChars is true',
        );
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is PasswordGeneratorConfiguration &&
-        length == other.length &&
-        minLowercase == other.minLowercase &&
-        minUppercase == other.minUppercase &&
-        minDigits == other.minDigits &&
-        minSpecial == other.minSpecial &&
-        specialChars.length == other.specialChars.length &&
-        specialChars.every((c) => other.specialChars.contains(c)) &&
-        useSpecialChars == other.useSpecialChars &&
-        useDigits == other.useDigits &&
-        useLowercase == other.useLowercase &&
-        useUppercase == other.useUppercase &&
-        numberOfShuffles == other.numberOfShuffles;
-  }
+  /// The length of the password.
+  final int length;
+
+  /// The minimum number of lowercase characters.
+  final int minLowercase;
+
+  /// The minimum number of uppercase characters.
+  final int minUppercase;
+
+  /// The minimum number of digits.
+  final int minDigits;
+
+  /// The minimum number of special characters.
+  final int minSpecial;
+
+  /// The pool of special characters, e.g. `'!@#\$%'`. Each Unicode code point is one character.
+  final String specialChars;
+
+  /// Whether special characters can be used.
+  final bool useSpecialChars;
+
+  /// Whether digits can be used.
+  final bool useDigits;
+
+  /// Whether lowercase characters can be used.
+  final bool useLowercase;
+
+  /// Whether uppercase characters can be used.
+  final bool useUppercase;
+
+  /// Returns a copy of this configuration with the given fields replaced.
+  PasswordGeneratorConfiguration copyWith({
+    int? length,
+    int? minLowercase,
+    int? minUppercase,
+    int? minDigits,
+    int? minSpecial,
+    String? specialChars,
+    bool? useSpecialChars,
+    bool? useDigits,
+    bool? useLowercase,
+    bool? useUppercase,
+  }) => PasswordGeneratorConfiguration(
+    length: length ?? this.length,
+    minLowercase: minLowercase ?? this.minLowercase,
+    minUppercase: minUppercase ?? this.minUppercase,
+    minDigits: minDigits ?? this.minDigits,
+    minSpecial: minSpecial ?? this.minSpecial,
+    specialChars: specialChars ?? this.specialChars,
+    useSpecialChars: useSpecialChars ?? this.useSpecialChars,
+    useDigits: useDigits ?? this.useDigits,
+    useLowercase: useLowercase ?? this.useLowercase,
+    useUppercase: useUppercase ?? this.useUppercase,
+  );
 
   @override
-  int get hashCode =>
-      length.hashCode ^
-      minLowercase.hashCode ^
-      minUppercase.hashCode ^
-      minDigits.hashCode ^
-      minSpecial.hashCode ^
-      specialChars.fold(0, (prev, c) => prev ^ c.hashCode) ^
-      useSpecialChars.hashCode ^
-      useDigits.hashCode ^
-      useLowercase.hashCode ^
-      useUppercase.hashCode ^
-      numberOfShuffles.hashCode;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordGeneratorConfiguration &&
+          length == other.length &&
+          minLowercase == other.minLowercase &&
+          minUppercase == other.minUppercase &&
+          minDigits == other.minDigits &&
+          minSpecial == other.minSpecial &&
+          specialChars == other.specialChars &&
+          useSpecialChars == other.useSpecialChars &&
+          useDigits == other.useDigits &&
+          useLowercase == other.useLowercase &&
+          useUppercase == other.useUppercase;
+
+  @override
+  int get hashCode => Object.hash(
+    length,
+    minLowercase,
+    minUppercase,
+    minDigits,
+    minSpecial,
+    specialChars,
+    useSpecialChars,
+    useDigits,
+    useLowercase,
+    useUppercase,
+  );
 }

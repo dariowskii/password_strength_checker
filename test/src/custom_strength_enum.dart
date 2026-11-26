@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:password_strength_checker/src/enum/password_strength_enum.dart';
+import 'package:password_strength_checker/password_strength_checker.dart';
 
 enum CustomPassStrength implements PasswordStrengthItem {
   weak,

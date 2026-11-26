@@ -1,31 +1,71 @@
 import 'package:flutter/material.dart';
 
-import '../password_strength_checker.dart';
+import 'config/password_generator_configuration.dart';
+import 'config/password_strength_checker_configuration.dart';
+import 'enum/password_strength_enum.dart';
+import 'password_generator/password_generator.dart';
+import 'password_strength_checker.dart';
 
-/// The widget to use into a [Form] widget.
+/// Builds a custom password field for [PasswordStrengthFormChecker].
+typedef PasswordFieldBuilder =
+    Widget Function(BuildContext context, PasswordFieldData data);
+
+/// What a [PasswordFieldBuilder] needs to wire its own field.
+final class PasswordFieldData {
+  const PasswordFieldData._({
+    required this.controller,
+    required this.validator,
+    required this.isConfirmation,
+    this.focusNode,
+  });
+
+  /// The controller to attach to the field.
+  final TextEditingController controller;
+
+  /// The validator to attach to the field.
+  final FormFieldValidator<String> validator;
+
+  /// The focus node to attach to the field, if any.
+  final FocusNode? focusNode;
+
+  /// Whether this is the confirmation field.
+  final bool isConfirmation;
+}
+
+/// A password field with a strength bar, ready to use inside a [Form].
 ///
-/// You need to set a [minimumStrengthRequired] for the password field,
-/// in this way the form will not be valid until at least the indicated
-/// security level is reached.
+/// The form is valid only when the password reaches
+/// [minimumStrengthRequired]:
 ///
-/// You need also to set a [onChanged] callback to manage the current strength
-/// of the password based on the text. For example:
-///
-/// ```
+/// ```dart
 /// PasswordStrengthFormChecker(
 ///   minimumStrengthRequired: PasswordStrength.secure,
-///   onChanged: (password, notifier) {
-///     notifier.value = PasswordStrength.calculate(text: password);
-///   },
-/// ),
+///   strengthCalculator: (text) => PasswordStrength.calculate(text: text),
+/// )
 /// ```
 class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     extends StatefulWidget {
-  /// Creates a [PasswordStrengthFormChecker] widget with the specified parameters.
+  /// Creates a [PasswordStrengthFormChecker].
   const PasswordStrengthFormChecker({
     super.key,
-    required this.onChanged,
     required this.minimumStrengthRequired,
+    required this.strengthCalculator,
+    this.onChanged,
+    this.controller,
+    this.confirmationController,
+    this.focusNode,
+    this.decoration = const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Password',
+    ),
+    this.confirmationDecoration = const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Confirm password',
+    ),
+    this.obscureText = true,
+    this.autofillHints = const [AutofillHints.newPassword],
+    this.autovalidateMode,
+    this.fieldBuilder,
     this.emptyTextErrorMessage = 'Password cannot be empty',
     this.errorMessage = 'Password is not strong enough',
     this.confirmationErrorMessage = 'Passwords do not match',
@@ -33,15 +73,6 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
     this.hideConfirmationErrorMessageWhenEmpty = false,
     this.topInstructions,
     this.needConfirmation = false,
-    this.textFormFieldConfiguration = const TextFormFieldConfiguration(),
-    this.confirmationTextFormFieldConfiguration =
-        const TextFormFieldConfiguration(
-          decoration: InputDecoration(
-            errorStyle: TextStyle(height: 0),
-            border: OutlineInputBorder(),
-            labelText: 'Confirm Password',
-          ),
-        ),
     this.passwordStrengthCheckerConfiguration =
         const PasswordStrengthCheckerConfiguration(),
     this.showGenerator = false,
@@ -49,69 +80,87 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
         const PasswordGeneratorConfiguration(),
     this.onPasswordGenerated,
     this.generateButtonStyle,
-    this.generateButtonChild = const Text("Generate Password"),
-    this.generateButtonSize = const Size(double.maxFinite, 48),
+    this.generateButtonChild = const Text('Generate password'),
     this.automaticallyFillWithGeneratedPassword = true,
   });
 
-  /// The function that will be called when the text changes. You need to update the [ValueNotifier] to update the widget.
-  final void Function(String password, ValueNotifier<T?> strengthNotifier)
-  onChanged;
-
-  /// The minimum strength required to consider the password strong enough.
+  /// The minimum strength the password must reach to be valid.
   final T minimumStrengthRequired;
 
-  /// The text to show when the password is empty.
-  final String? emptyTextErrorMessage;
+  /// Computes the strength of a password, e.g. `PasswordStrength.calculate`.
+  final T? Function(String password) strengthCalculator;
 
-  /// The text to show when the password is not strong enough.
+  /// Called whenever the password or its strength changes.
+  final void Function(String password, T? strength)? onChanged;
+
+  /// The controller of the password field. One is created if `null`.
+  final TextEditingController? controller;
+
+  /// The controller of the confirmation field. One is created if `null`.
+  final TextEditingController? confirmationController;
+
+  /// The focus node of the password field.
+  final FocusNode? focusNode;
+
+  /// The decoration of the password field.
+  final InputDecoration decoration;
+
+  /// The decoration of the confirmation field.
+  final InputDecoration confirmationDecoration;
+
+  /// Whether the fields hide the text.
+  final bool obscureText;
+
+  /// The autofill hints of the password field.
+  final Iterable<String>? autofillHints;
+
+  /// When the fields validate themselves.
+  final AutovalidateMode? autovalidateMode;
+
+  /// Replaces the default [TextFormField]s with your own fields.
+  final PasswordFieldBuilder? fieldBuilder;
+
+  /// The error shown when the password is empty.
+  final String emptyTextErrorMessage;
+
+  /// The error shown when the password is not strong enough.
   final String errorMessage;
 
-  /// The text to show when the password confirmation is not the same as the password.
+  /// The error shown when the confirmation does not match.
   final String confirmationErrorMessage;
 
-  /// If true, the confirmation error message will not be shown when the confirmation is empty.
-  final bool hideConfirmationErrorMessageWhenEmpty;
-
-  /// If true, the error message will not be shown.
+  /// Whether to hide error texts. The fields still turn invalid.
   final bool hideErrorMessage;
 
-  /// The instructions to show above the password field.
+  /// Whether to hide the confirmation error while the confirmation is empty.
+  final bool hideConfirmationErrorMessageWhenEmpty;
+
+  /// A widget shown above the password field.
   final Widget? topInstructions;
 
-  /// If true, you need to set the [textFormFieldConfiguration.controller] to work and the confirmation field will be shown.
+  /// Whether to show a confirmation field.
   final bool needConfirmation;
 
-  /// The configuration for the password field [TextFormField].
-  final TextFormFieldConfiguration textFormFieldConfiguration;
-
-  /// The configuration for the confirmation field [TextFormField].
-  final TextFormFieldConfiguration confirmationTextFormFieldConfiguration;
-
-  /// The configuration for the [PasswordStrengthChecker].
+  /// The look and feel of the strength bar.
   final PasswordStrengthCheckerConfiguration
   passwordStrengthCheckerConfiguration;
 
-  /// If true, a button to generate a password will be shown.
+  /// Whether to show a button that generates a password.
   final bool showGenerator;
 
-  /// The configuration for the [PasswordGenerator].
+  /// The rules used by the generate button.
   final PasswordGeneratorConfiguration passwordGeneratorConfiguration;
 
-  /// The function that will be called when the password is generated.
-  final Function(String password, ValueNotifier<T?> strengthNotifier)?
-  onPasswordGenerated;
+  /// Called with every generated password.
+  final ValueChanged<String>? onPasswordGenerated;
 
-  /// The style for the generate button.
+  /// The style of the generate button.
   final ButtonStyle? generateButtonStyle;
 
-  /// The child for the generate button.
-  final Widget? generateButtonChild;
+  /// The content of the generate button.
+  final Widget generateButtonChild;
 
-  /// The size for the generate button.
-  final Size generateButtonSize;
-
-  /// Fill the fields with the generated [password].
+  /// Whether a generated password fills the fields.
   final bool automaticallyFillWithGeneratedPassword;
 
   @override
@@ -121,185 +170,147 @@ class PasswordStrengthFormChecker<T extends PasswordStrengthItem>
 
 class _PasswordStrengthFormCheckerState<T extends PasswordStrengthItem>
     extends State<PasswordStrengthFormChecker<T>> {
-  late final _passNotifier = ValueNotifier<T?>(null);
-  late var _passwordGenerator = PasswordGenerator.fromConfig(
-    configuration: widget.passwordGeneratorConfiguration,
-  );
+  final _strength = ValueNotifier<T?>(null);
+  TextEditingController? _ownController;
+  TextEditingController? _ownConfirmation;
+  String? _lastText;
+
+  TextEditingController get _controller =>
+      widget.controller ?? (_ownController ??= TextEditingController());
+
+  TextEditingController get _confirmation =>
+      widget.confirmationController ??
+      (_ownConfirmation ??= TextEditingController());
 
   @override
-  void dispose() {
-    _passNotifier.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _controller.addListener(_onTextChanged);
+    _update(_controller.text, notify: false);
   }
 
   @override
-  void didUpdateWidget(covariant PasswordStrengthFormChecker<T> oldWidget) {
+  void didUpdateWidget(PasswordStrengthFormChecker<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.passwordGeneratorConfiguration !=
-        widget.passwordGeneratorConfiguration) {
-      _passwordGenerator = PasswordGenerator.fromConfig(
-        configuration: widget.passwordGeneratorConfiguration,
-      );
+    final old = oldWidget.controller ?? _ownController;
+    if (old != _controller) {
+      old?.removeListener(_onTextChanged);
+      _controller.addListener(_onTextChanged);
+      _update(_controller.text);
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onTextChanged);
+    _ownController?.dispose();
+    _ownConfirmation?.dispose();
+    _strength.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged() => _update(_controller.text);
+
+  void _update(String text, {bool notify = true}) {
+    if (text == _lastText) return;
+    _lastText = text;
+    final strength = text.isEmpty ? null : widget.strengthCalculator(text);
+    _strength.value = strength;
+    if (notify) widget.onChanged?.call(text, strength);
+  }
+
+  String? _error(String message) => widget.hideErrorMessage ? '' : message;
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return _error(widget.emptyTextErrorMessage);
+    }
+    final strength = widget.strengthCalculator(value);
+    if (strength == null ||
+        strength.index < widget.minimumStrengthRequired.index) {
+      return _error(widget.errorMessage);
+    }
+    return null;
+  }
+
+  String? _validateConfirmation(String? value) {
+    if (value == _controller.text) return null;
+    if ((value ?? '').isEmpty && widget.hideConfirmationErrorMessageWhenEmpty) {
+      return '';
+    }
+    return _error(widget.confirmationErrorMessage);
+  }
+
+  void _generate() {
+    final password = PasswordGenerator(
+      widget.passwordGeneratorConfiguration,
+    ).generate();
+    if (widget.automaticallyFillWithGeneratedPassword) {
+      _controller.text = password;
+      if (widget.needConfirmation) _confirmation.text = password;
+    }
+    widget.onPasswordGenerated?.call(password);
+  }
+
+  Widget _field(PasswordFieldData data, InputDecoration decoration) {
+    if (widget.fieldBuilder case final builder?) {
+      return builder(context, data);
+    }
+    return TextFormField(
+      controller: data.controller,
+      focusNode: data.focusNode,
+      validator: data.validator,
+      decoration: decoration,
+      obscureText: widget.obscureText,
+      autocorrect: false,
+      enableSuggestions: false,
+      autofillHints: data.isConfirmation ? null : widget.autofillHints,
+      autovalidateMode: widget.autovalidateMode,
+      keyboardType: TextInputType.visiblePassword,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.topInstructions != null) widget.topInstructions!,
-        _TextFormField(
-          configuration: widget.textFormFieldConfiguration,
-          onChanged: (value) => widget.onChanged(value, _passNotifier),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return widget.hideErrorMessage
-                  ? ''
-                  : widget.emptyTextErrorMessage;
-            }
-            final strength = _passNotifier.value!;
-            if (strength.index < widget.minimumStrengthRequired.index) {
-              return widget.hideErrorMessage ? '' : widget.errorMessage;
-            }
-            return null;
-          },
+        ?widget.topInstructions,
+        _field(
+          PasswordFieldData._(
+            controller: _controller,
+            focusNode: widget.focusNode,
+            validator: _validatePassword,
+            isConfirmation: false,
+          ),
+          widget.decoration,
         ),
-        if (widget.needConfirmation &&
-            widget.textFormFieldConfiguration.controller != null) ...[
+        if (widget.needConfirmation) ...[
           const SizedBox(height: 10),
-          _TextFormField(
-            configuration: widget.confirmationTextFormFieldConfiguration,
-            validator: (value) {
-              if (value == null ||
-                  (value.isEmpty &&
-                      !widget.hideConfirmationErrorMessageWhenEmpty) ||
-                  value != widget.textFormFieldConfiguration.controller!.text) {
-                return widget.confirmationErrorMessage;
-              }
-              return null;
-            },
+          _field(
+            PasswordFieldData._(
+              controller: _confirmation,
+              validator: _validateConfirmation,
+              isConfirmation: true,
+            ),
+            widget.confirmationDecoration,
           ),
         ],
         const SizedBox(height: 20),
-        PasswordStrengthChecker(
-          strength: _passNotifier,
+        PasswordStrengthChecker<T>(
+          strength: _strength,
           configuration: widget.passwordStrengthCheckerConfiguration,
         ),
         if (widget.showGenerator) ...[
           const SizedBox(height: 20),
-          SizedBox(
-            width: widget.generateButtonSize.width,
-            height: widget.generateButtonSize.height,
-            child: ElevatedButton(
-              style: widget.generateButtonStyle,
-              onPressed: () {
-                final password = _passwordGenerator.generate();
-
-                if (widget.automaticallyFillWithGeneratedPassword) {
-                  widget.textFormFieldConfiguration.controller?.text = password;
-                  widget
-                          .confirmationTextFormFieldConfiguration
-                          .controller
-                          ?.text =
-                      password;
-                }
-
-                widget.onPasswordGenerated?.call(password, _passNotifier);
-              },
-              child: widget.generateButtonChild,
-            ),
+          FilledButton.tonal(
+            style: widget.generateButtonStyle,
+            onPressed: _generate,
+            child: widget.generateButtonChild,
           ),
         ],
       ],
     );
   }
-}
-
-class _TextFormField extends TextFormField {
-  _TextFormField({
-    required this.configuration,
-    super.onChanged,
-    super.validator,
-  }) : super(
-         key: configuration.key,
-         groupId: configuration.groupId,
-         controller: configuration.controller,
-         initialValue: configuration.initialValue,
-         focusNode: configuration.focusNode,
-         forceErrorText: configuration.forceErrorText,
-         decoration: configuration.decoration,
-         keyboardType: configuration.keyboardType,
-         textCapitalization: configuration.textCapitalization,
-         textInputAction: configuration.textInputAction,
-         style: configuration.style,
-         strutStyle: configuration.strutStyle,
-         textDirection: configuration.textDirection,
-         textAlign: configuration.textAlign,
-         textAlignVertical: configuration.textAlignVertical,
-         autofocus: configuration.autofocus,
-         readOnly: configuration.readOnly,
-         toolbarOptions: configuration.toolbarOptions,
-         showCursor: configuration.showCursor,
-         obscuringCharacter: configuration.obscuringCharacter,
-         obscureText: configuration.obscureText,
-         autocorrect: configuration.autocorrect,
-         smartDashesType: configuration.smartDashesType,
-         smartQuotesType: configuration.smartQuotesType,
-         enableSuggestions: configuration.enableSuggestions,
-         maxLengthEnforcement: configuration.maxLengthEnforcement,
-         maxLines: configuration.maxLines,
-         minLines: configuration.minLines,
-         expands: configuration.expands,
-         maxLength: configuration.maxLength,
-         onTap: configuration.onTap,
-         onTapAlwaysCalled: configuration.onTapAlwaysCalled,
-         onTapOutside: configuration.onTapOutside,
-         onTapUpOutside: configuration.onTapUpOutside,
-         onEditingComplete: configuration.onEditingComplete,
-         onFieldSubmitted: configuration.onFieldSubmitted,
-         onSaved: configuration.onSaved,
-         errorBuilder: configuration.errorBuilder,
-         inputFormatters: configuration.inputFormatters,
-         enabled: configuration.enabled,
-         ignorePointers: configuration.ignorePointers,
-         cursorWidth: configuration.cursorWidth,
-         cursorHeight: configuration.cursorHeight,
-         cursorRadius: configuration.cursorRadius,
-         cursorColor: configuration.cursorColor,
-         cursorErrorColor: configuration.cursorErrorColor,
-         keyboardAppearance: configuration.keyboardAppearance,
-         scrollPadding: configuration.scrollPadding,
-         enableInteractiveSelection: configuration.enableInteractiveSelection,
-         selectAllOnFocus: configuration.selectAllOnFocus,
-         selectionControls: configuration.selectionControls,
-         buildCounter: configuration.buildCounter,
-         scrollPhysics: configuration.scrollPhysics,
-         autofillHints: configuration.autofillHints,
-         autovalidateMode: configuration.autovalidateMode,
-         scrollController: configuration.scrollController,
-         restorationId: configuration.restorationId,
-         enableIMEPersonalizedLearning:
-             configuration.enableIMEPersonalizedLearning,
-         mouseCursor: configuration.mouseCursor,
-         contextMenuBuilder: configuration.contextMenuBuilder,
-         spellCheckConfiguration: configuration.spellCheckConfiguration,
-         magnifierConfiguration: configuration.magnifierConfiguration,
-         undoController: configuration.undoController,
-         onAppPrivateCommand: configuration.onAppPrivateCommand,
-         cursorOpacityAnimates: configuration.cursorOpacityAnimates,
-         selectionHeightStyle: configuration.selectionHeightStyle,
-         selectionWidthStyle: configuration.selectionWidthStyle,
-         dragStartBehavior: configuration.dragStartBehavior,
-         contentInsertionConfiguration:
-             configuration.contentInsertionConfiguration,
-         statesController: configuration.statesController,
-         clipBehavior: configuration.clipBehavior,
-         scribbleEnabled: configuration.scribbleEnabled,
-         stylusHandwritingEnabled: configuration.stylusHandwritingEnabled,
-         canRequestFocus: configuration.canRequestFocus,
-         hintLocales: configuration.hintLocales,
-       );
-
-  final TextFormFieldConfiguration configuration;
 }

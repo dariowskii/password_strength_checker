@@ -1,80 +1,92 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:password_strength_checker/password_strength_checker.dart';
 
-/// The widget that shows the password strength.
+import 'config/password_strength_checker_configuration.dart';
+import 'enum/password_strength_enum.dart';
+
+/// An animated bar that shows the current password strength.
+///
+/// ```dart
+/// final strength = ValueNotifier<PasswordStrength?>(null);
+/// PasswordStrengthChecker(strength: strength);
+/// ```
 class PasswordStrengthChecker<T extends PasswordStrengthItem>
     extends StatelessWidget {
-  /// Creates a [PasswordStrengthChecker] widget with the specified configuration.
+  /// Creates a [PasswordStrengthChecker].
   const PasswordStrengthChecker({
     super.key,
     required this.strength,
     this.configuration = const PasswordStrengthCheckerConfiguration(),
   });
 
-  /// The [ValueNotifier] that contains the [PasswordStrengthItem].
-  final ValueNotifier<T?> strength;
+  /// The current strength, or `null` when there is no password.
+  final ValueListenable<T?> strength;
 
-  /// The object that keeps all the widget configuration.
+  /// The look and feel of the bar.
   final PasswordStrengthCheckerConfiguration configuration;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
+    final config = configuration;
+    final inactiveColor =
+        config.inactiveBorderColor ??
+        Theme.of(context).colorScheme.outlineVariant;
+
+    return ValueListenableBuilder<T?>(
       valueListenable: strength,
-      builder: (_, currentStrength, __) {
-        final statusWidget = currentStrength?.statusWidget;
-        return Column(
-          children: [
-            AnimatedContainer(
-              duration: configuration.animationDuration,
-              curve: configuration.animationCurve,
-              height: configuration.height,
-              width: configuration.width,
-              alignment: configuration.leftToRight
-                  ? Alignment.centerLeft
-                  : Alignment.centerRight,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: configuration.externalBorderRadius,
-                border: configuration.hasBorder
-                    ? Border.all(
-                        color:
-                            configuration.borderColor ??
-                            currentStrength?.statusColor ??
-                            configuration.inactiveBorderColor,
-                        width: configuration.borderWidth,
-                      )
-                    : null,
-              ),
-              child: LayoutBuilder(
-                builder: (_, constraints) {
-                  return Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: AnimatedContainer(
-                      duration: configuration.animationDuration,
-                      curve: configuration.animationCurve,
-                      width:
-                          constraints.maxWidth *
-                          (currentStrength?.widthPerc ?? 0),
-                      decoration: BoxDecoration(
-                        color: currentStrength?.statusColor,
-                        borderRadius: configuration.internalBorderRadius,
-                      ),
+      builder: (context, current, _) {
+        final status = config.showStatusWidget ? current?.statusWidget : null;
+        return Semantics(
+          container: true,
+          label: config.semanticsLabel,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: config.animationDuration,
+                curve: config.animationCurve,
+                height: config.height,
+                width: config.width,
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  borderRadius: config.externalBorderRadius,
+                  border: config.hasBorder
+                      ? Border.all(
+                          color:
+                              config.borderColor ??
+                              current?.statusColor ??
+                              inactiveColor,
+                          width: config.borderWidth,
+                        )
+                      : null,
+                ),
+                child: AnimatedFractionallySizedBox(
+                  duration: config.animationDuration,
+                  curve: config.animationCurve,
+                  alignment: config.leftToRight
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  widthFactor: current?.widthPerc ?? 0,
+                  child: AnimatedContainer(
+                    duration: config.animationDuration,
+                    curve: config.animationCurve,
+                    decoration: BoxDecoration(
+                      color: current?.statusColor,
+                      borderRadius: config.internalBorderRadius,
                     ),
-                  );
-                },
-              ),
-            ),
-            if (configuration.showStatusWidget && statusWidget != null) ...[
-              Container(
-                margin: configuration.statusMargin,
-                child: Row(
-                  mainAxisAlignment: configuration.statusWidgetAlignment,
-                  children: [statusWidget],
+                  ),
                 ),
               ),
+              if (status != null)
+                Padding(
+                  padding: config.statusMargin,
+                  child: Align(
+                    alignment: config.statusWidgetAlignment,
+                    child: status,
+                  ),
+                ),
             ],
-          ],
+          ),
         );
       },
     );

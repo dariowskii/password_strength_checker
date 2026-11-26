@@ -1,143 +1,198 @@
-# password_strength_checker
-![License](https://img.shields.io/github/license/dariowskii/password_strength_checker) ![Pub Version](https://img.shields.io/pub/v/password_strength_checker) ![Pub Likes](https://img.shields.io/pub/likes/password_strength_checker) ![Pub Points](https://img.shields.io/pub/points/password_strength_checker) ![Pub Monthly Downloads](https://img.shields.io/pub/dm/password_strength_checker) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/dariowskii/password_strength_checker?label=size) ![GitHub Repo stars](https://img.shields.io/github/stars/dariowskii/password_strength_checker) ![GitHub issues](https://img.shields.io/github/issues/dariowskii/password_strength_checker) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/dariowskii/password_strength_checker) ![GitHub top language](https://img.shields.io/github/languages/top/dariowskii/password_strength_checker) [![CI](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dariowskii/password_strength_checker/master/.github/assets/banner.png" alt="password_strength_checker" width="100%" />
+</p>
 
-Generate **secure** passwords, check for exposed passwords, get visual feedback for password strength or get form validation with a minimum password strength required.
+<p align="center">
+  <a href="https://pub.dev/packages/password_strength_checker"><img src="https://img.shields.io/pub/v/password_strength_checker?color=22C55E&label=pub.dev" alt="Pub version" /></a>
+  <a href="https://pub.dev/packages/password_strength_checker/score"><img src="https://img.shields.io/pub/points/password_strength_checker?color=22C55E" alt="Pub points" /></a>
+  <a href="https://pub.dev/packages/password_strength_checker/score"><img src="https://img.shields.io/pub/dm/password_strength_checker?color=22C55E" alt="Monthly downloads" /></a>
+  <a href="https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml"><img src="https://github.com/dariowskii/password_strength_checker/actions/workflows/dart.yml/badge.svg?branch=master" alt="CI" /></a>
+  <a href="https://github.com/dariowskii/password_strength_checker/blob/master/LICENSE"><img src="https://img.shields.io/github/license/dariowskii/password_strength_checker?color=64748B" alt="License" /></a>
+</p>
 
-Check the strength of the password in a visual way, with an animation when the strength changes according to the settings given by the user.
-Use it also inside a `Form` to get form validation!
+<p align="center">
+  <b>Animated strength bar · Form validation · 10k leaked-password check · Secure generator</b><br/>
+  Zero dependencies. Fully customizable. Bring your own strength rules.
+</p>
 
-## Features
+---
 
-- Check for exposed common password using the `commonDictionary`, a map with 10,000 leaked passwords!
-- Use the `PasswordStrengthChecker` to have a visual feedback.
-- Use the `PasswordStrengthFormChecker` to have a built-in `TextFormField` inside the widget and get form validation using a `minimumStrengthRequired`.
-- Use the `PasswordGenerator` class to generate a **secure** random password based on the input configurations (`PasswordGeneratorConfiguration`).
-- Create your custom strength to create your own rules or use the `PasswordStrength` default enum (see [Custom Strength](#custom-strength)).
+## ✨ Features
 
-## Demo
+| | |
+|---|---|
+| 📊 **`PasswordStrengthChecker`** | An animated bar that follows any `ValueListenable` of strength. Theme-aware (light and dark) and accessible. |
+| 📝 **`PasswordStrengthFormChecker`** | A drop-in `Form` field. It validates against a `minimumStrengthRequired` and can show a confirmation field and a generate button. |
+| 🛡️ **`isCommonPassword`** | Checks a password against the 10,000 most common leaked passwords. The match is case-insensitive. |
+| 🎲 **`PasswordGenerator`** | Generates passwords with `Random.secure()` and per-class minimums. |
+| 🎨 **Custom strength** | Implement `PasswordStrengthItem` on your own `enum` to define your own levels, colors and rules. |
 
-![Demo Form Gif](./screenshots/demo_form.gif)
-![Demo Gif](./screenshots/demo.gif)
-![Demo Generator Gif](./screenshots/demo_generator.gif)
+## 🎬 Demo
 
-## Getting started
+<p align="center">
+  <img src="https://raw.githubusercontent.com/dariowskii/password_strength_checker/master/screenshots/demo_form.webp" width="32%" alt="Form validation" />
+  <img src="https://raw.githubusercontent.com/dariowskii/password_strength_checker/master/screenshots/demo.webp" width="32%" alt="Strength bar" />
+  <img src="https://raw.githubusercontent.com/dariowskii/password_strength_checker/master/screenshots/demo_generator.webp" width="32%" alt="Password generator" />
+</p>
 
-### PasswordStrengthChecker
+## 🚀 Getting started
 
-You can use the `PasswordStrengthChecker` to only have a visual feedback, for example:
-
-```dart
-final passNotifier = ValueNotifier<PasswordStrength?>(null);
-// ...
-PasswordStrengthChecker(
-  strength: passNotifier,
-),
+```bash
+flutter pub add password_strength_checker
 ```
 
-See the [full example here](./example/password_strength_checker_example.dart).
-
-### PasswordStrengthFormChecker
-
-You can use the `PasswordStrengthFormChecker` to have a built-in `TextFormField` inside the widget and get form validation using a `minimumStrengthRequired`. For example:
-
 ```dart
-PasswordStrengthFormChecker(
-  minimumStrengthRequired: PasswordStrength.secure,
-  onChanged: (password, notifier) {
-    notifier.value = PasswordStrength.calculate(text: password);
-  },
-),
+import 'package:password_strength_checker/password_strength_checker.dart';
 ```
 
-See the [full example here](./example/password_strength_form_checker_example.dart).
+### Form field with validation
 
-### PasswordGenerator
-
-You can use the `PasswordGenerator`class to generate a **secure** random password based on the configurations. For example:
+The widget calculates the strength for you. The form is valid only when the password reaches `minimumStrengthRequired`.
 
 ```dart
-final config = PasswordGeneratorConfiguration(
-  length: 32,
-  minUppercase: 8,
-  minSpecialChars: 8,
-  // ...
+Form(
+  key: formKey,
+  child: PasswordStrengthFormChecker<PasswordStrength>(
+    minimumStrengthRequired: PasswordStrength.secure,
+    strengthCalculator: (text) => PasswordStrength.calculate(text: text),
+    needConfirmation: true, // optional confirmation field
+    showGenerator: true,    // optional "Generate password" button
+  ),
+);
+```
+
+Pass `controller`, `decoration`, `focusNode` or `autovalidateMode` to tune the default field. For full control, use `fieldBuilder` to plug in your own field:
+
+```dart
+PasswordStrengthFormChecker<PasswordStrength>(
+  minimumStrengthRequired: PasswordStrength.strong,
+  strengthCalculator: (text) => PasswordStrength.calculate(text: text),
+  fieldBuilder: (context, data) => MyFancyField(
+    controller: data.controller,
+    validator: data.validator,
+  ),
+);
+```
+
+➡️ [Full example](https://github.com/dariowskii/password_strength_checker/blob/master/example/password_strength_form_checker_example.dart)
+
+### Strength bar only
+
+```dart
+final strength = ValueNotifier<PasswordStrength?>(null);
+
+TextField(
+  onChanged: (text) => strength.value = PasswordStrength.calculate(text: text),
+);
+PasswordStrengthChecker(strength: strength);
+```
+
+Use `PasswordStrengthCheckerConfiguration` to change the size, the border, the animation, the direction and the status widget.
+
+➡️ [Full example](https://github.com/dariowskii/password_strength_checker/blob/master/example/password_strength_checker_example.dart)
+
+### Password generator
+
+```dart
+const generator = PasswordGenerator(
+  PasswordGeneratorConfiguration(length: 32, minUppercase: 8, minSpecial: 8),
 );
 
-final passwordGenerator = PasswordGenerator.fromConfig(
-  configuration: config,
-);
-
-final password = passwordGenerator.generate();
+final password = generator.generate();
 ```
 
-See the [full example here](./example/password_generator_example.dart).
+➡️ [Full example](https://github.com/dariowskii/password_strength_checker/blob/master/example/password_generator_example.dart)
 
-### Custom Strength
-
-You can use the default `PasswordStrength` enum to set the strength of the password, or you can create your own enum that implements `PasswordStrengthItem` and use it. For example:
+### Leaked password check
 
 ```dart
-enum CustomPassStrength implements PasswordStrengthItem {
+isCommonPassword('Password'); // true, case-insensitive
+commonPasswords.length;       // 10000
+```
+
+## 📏 Default rules
+
+`PasswordStrength.calculate` checks the rules in this order:
+
+| Level | Rule |
+|---|---|
+| `alreadyExposed` | The password is in the 10k leaked list. |
+| `weak` | Fewer than 12 characters, or only 1 character class. |
+| `medium` | 2 character classes. |
+| `strong` | 3 character classes. |
+| `secure` | Lowercase + uppercase + digit + special character. |
+
+A special character is anything that is not a letter, a digit or whitespace, Unicode included (`.`, `+`, `€`…). Accented letters such as `à` or `Ç` count as lowercase or uppercase letters.
+
+## 🎨 Custom strength
+
+```dart
+enum MyStrength implements PasswordStrengthItem {
   weak,
   medium,
   strong;
 
   @override
   Color get statusColor => switch (this) {
-      CustomPassStrength.weak => Colors.red,
-      CustomPassStrength.medium => Colors.orange,
-      CustomPassStrength.strong => Colors.green,
-    };
-
-  @override
-  Widget? get statusWidget => switch (this) {
-      CustomPassStrength.weak => const Text('Weak'),
-      CustomPassStrength.medium => const Text('Medium'),
-      CustomPassStrength.strong => const Text('Strong'),
-    };
+    weak => Colors.red,
+    medium => Colors.orange,
+    strong => Colors.green,
+  };
 
   @override
   double get widthPerc => switch (this) {
-      CustomPassStrength.weak => 0.15,
-      CustomPassStrength.medium => 0.4,
-      CustomPassStrength.strong => 0.75,
-    };
+    weak => 0.3,
+    medium => 0.6,
+    strong => 1.0,
+  };
 
-  static CustomPassStrength? calculate({required String text}) {
-    // Implement your custom logic here
-    if (text.isEmpty) {
-      return null;
-    }
-    // Use the [commonDictionary] to see if a password
-    // is in 10,000 common exposed password list.
-    if (commonDictionary[text] == true) {
-      return CustomPassStrength.weak;
-    }
-    if (text.length < 6) {
-      return CustomPassStrength.weak;
-    } else if (text.length < 10) {
-      return CustomPassStrength.medium;
-    } else {
-      return CustomPassStrength.strong;
-    }
+  @override
+  Widget? get statusWidget => Text(name);
+
+  static MyStrength? calculate(String text) {
+    if (text.isEmpty) return null;
+    if (isCommonPassword(text) || text.length < 6) return weak;
+    return text.length < 10 ? medium : strong;
   }
 }
+
+PasswordStrengthFormChecker<MyStrength>(
+  minimumStrengthRequired: MyStrength.medium,
+  strengthCalculator: MyStrength.calculate,
+);
 ```
 
-## Contribution
+The enum order is the strength order: a value declared later counts as stronger.
 
-The project is open source and you can contribute to it here -> [repository link](https://github.com/dariowskii/password_strength_checker)
+## 🔄 Migrating from 1.x
 
-- If you **found a bug**, open an issue.
-- If you **have a feature request**, open an issue.
-- If you **want to contribute**, submit a pull request.
+| 1.x | 2.0 |
+|---|---|
+| `onChanged: (p, notifier) => notifier.value = PasswordStrength.calculate(text: p)` | `strengthCalculator: (p) => PasswordStrength.calculate(text: p)` |
+| `textFormFieldConfiguration: TextFormFieldConfiguration(...)` | `controller`, `decoration`, `focusNode`, `obscureText`, `autofillHints`, `autovalidateMode`, or `fieldBuilder` |
+| `confirmationTextFormFieldConfiguration` | `confirmationController`, `confirmationDecoration` |
+| `onPasswordGenerated: (password, notifier) {}` | `onPasswordGenerated: (password) {}`. The strength updates automatically. |
+| `generateButtonSize` (fixed 48 px `ElevatedButton`) | `generateButtonStyle`. The button is now a `FilledButton.tonal` that stretches to the form width. |
+| `emptyTextErrorMessage: null` to allow an empty password | `emptyTextErrorMessage` is a non-null `String`, so an empty password is always invalid. |
+| Default confirmation decoration had `errorStyle: TextStyle(height: 0)` | Default decorations show the error text. Pass your own `decoration` and `confirmationDecoration` to hide it. |
+| `commonDictionary[text] == true` | `isCommonPassword(text)` or `commonPasswords.contains(text)` |
+| `PasswordGenerator.fromConfig(configuration: c)` | `PasswordGenerator(c)` |
+| `generate(printDebugInfo: true)` | Removed. It printed the password to the logs. |
+| `PasswordGeneratorConfiguration(numberOfShuffles: n)` | Removed. One shuffle with `Random.secure()` is enough. |
+| `specialChars: ['!', '@']` | `specialChars: '!@'` |
+| `statusWidgetAlignment: MainAxisAlignment.start` | `statusWidgetAlignment: AlignmentDirectional.centerStart` |
+| `inactiveBorderColor: Colors.black` (default) | `null` by default, which follows the theme's `outlineVariant`. |
 
-## Contributors
+Behavior change: any character that is not a letter, a digit or whitespace now counts as special, accented letters count as letters, and the leaked-password check is case-insensitive. Some passwords can therefore get a different strength than in 1.x.
+
+## 🤝 Contributing
+
+Bug reports, feature requests and pull requests are welcome in the [repository](https://github.com/dariowskii/password_strength_checker).
 
 <a href="https://github.com/dariowskii/password_strength_checker/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=dariowskii/password_strength_checker" />
+  <img src="https://contrib.rocks/image?repo=dariowskii/password_strength_checker" alt="Contributors" />
 </a>
 
 ---
 
-Made with ❤️ from [dariowskii](https://www.linkedin.com/in/dario-varriale/)
+<p align="center">Made with ❤️ by <a href="https://www.linkedin.com/in/dario-varriale/">dariowskii</a></p>

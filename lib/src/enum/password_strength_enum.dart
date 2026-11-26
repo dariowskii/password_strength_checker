@@ -1,109 +1,112 @@
 import 'package:flutter/material.dart';
+
 import '../dict/common_passwords.dart';
 
-/// The default password strength length.
+/// The minimum length a password needs to be rated above
+/// [PasswordStrength.weak].
 const int kDefaultStrengthLength = 12;
 
-/// The abstract class for the password strength enum.
-abstract class PasswordStrengthItem implements Enum {
-  /// The color for every status.
+/// The contract for a password strength level.
+///
+/// Implement it with an `enum` to create your own levels. The enum order
+/// defines the strength order: the later a value is declared, the stronger it
+/// is considered.
+abstract interface class PasswordStrengthItem implements Enum {
+  /// The color of the bar for this level.
   Color get statusColor;
 
-  /// The percentual width of every status.
+  /// The filled fraction of the bar for this level, between `0` and `1`.
   double get widthPerc;
 
-  /// The widget to show for every status under the bar.
-  Widget? get statusWidget => null;
+  /// The widget shown under the bar for this level, or `null` for none.
+  Widget? get statusWidget;
 }
 
-/// The default enum for the password strength.
+/// The default password strength levels.
 enum PasswordStrength implements PasswordStrengthItem {
+  /// The password is in the [commonPasswords] list.
   alreadyExposed,
+
+  /// Shorter than [kDefaultStrengthLength] or with a single character class.
   weak,
+
+  /// Contains two character classes.
   medium,
+
+  /// Contains three character classes.
   strong,
+
+  /// Contains lowercase, uppercase, digits and special characters.
   secure;
 
-  /// The color for every status.
+  static final _lowercase = RegExp(r'\p{Ll}', unicode: true);
+  static final _uppercase = RegExp(r'\p{Lu}', unicode: true);
+  static final _digit = RegExp(r'\p{N}', unicode: true);
+  static final _special = RegExp(r'[^\p{L}\p{N}\s]', unicode: true);
+
   @override
   Color get statusColor => switch (this) {
-    PasswordStrength.alreadyExposed => const Color.fromARGB(255, 158, 15, 5),
-    PasswordStrength.weak => Colors.red,
-    PasswordStrength.medium => Colors.orange,
-    PasswordStrength.strong => Colors.green,
-    PasswordStrength.secure => const Color(0xFF0B6C0E),
+    alreadyExposed => const Color(0xFF9E0F05),
+    weak => Colors.red,
+    medium => Colors.orange,
+    strong => Colors.green,
+    secure => const Color(0xFF0B6C0E),
   };
 
-  /// The percentual width of every status.
   @override
   double get widthPerc => switch (this) {
-    PasswordStrength.alreadyExposed => 0.075,
-    PasswordStrength.weak => 0.15,
-    PasswordStrength.medium => 0.4,
-    PasswordStrength.strong => 0.75,
-    PasswordStrength.secure => 1.0,
+    alreadyExposed => 0.075,
+    weak => 0.15,
+    medium => 0.4,
+    strong => 0.75,
+    secure => 1.0,
   };
 
-  /// The widget to show for every status under the bar.
   @override
   Widget get statusWidget => switch (this) {
-    PasswordStrength.alreadyExposed => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Already exposed'),
-        const SizedBox(width: 5),
-        Icon(Icons.error, color: statusColor),
-      ],
-    ),
-    PasswordStrength.weak => const Text('Weak'),
-    PasswordStrength.medium => const Text('Medium'),
-    PasswordStrength.strong => const Text('Strong'),
-    PasswordStrength.secure => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text('Secure'),
-        const SizedBox(width: 5),
-        Icon(Icons.check_circle, color: statusColor),
-      ],
-    ),
+    alreadyExposed => _label('Already exposed', Icons.error),
+    weak => const Text('Weak'),
+    medium => const Text('Medium'),
+    strong => const Text('Strong'),
+    secure => _label('Secure', Icons.check_circle),
   };
 
-  /// Returns the [PasswordStrength] from the [text] value.
+  Widget _label(String text, IconData icon) => Row(
+    mainAxisSize: MainAxisSize.min,
+    spacing: 5,
+    children: [
+      Text(text),
+      Icon(icon, color: statusColor),
+    ],
+  );
+
+  /// Returns the [PasswordStrength] of [text], or `null` if it is empty.
   static PasswordStrength? calculate({required String text}) {
-    if (text.isEmpty) {
-      return null;
-    }
+    if (text.isEmpty) return null;
+    if (isCommonPassword(text)) return alreadyExposed;
+    if (text.length < kDefaultStrengthLength) return weak;
 
-    if (commonDictionary[text] == true) {
-      return PasswordStrength.alreadyExposed;
-    }
+    final classes = [
+      _lowercase,
+      _uppercase,
+      _digit,
+      _special,
+    ].where(text.contains).length;
 
-    if (text.length < kDefaultStrengthLength) {
-      return PasswordStrength.weak;
-    }
-
-    var counter = 0;
-    if (text.contains(RegExp(r'[a-z]'))) counter++;
-    if (text.contains(RegExp(r'[A-Z]'))) counter++;
-    if (text.contains(RegExp(r'[0-9]'))) counter++;
-    if (text.contains(RegExp(r'[!@#\$%&*()?£\-_=]'))) counter++;
-
-    return switch (counter) {
-      1 => PasswordStrength.weak,
-      2 => PasswordStrength.medium,
-      3 => PasswordStrength.strong,
-      4 => PasswordStrength.secure,
-      _ => PasswordStrength.weak,
+    return switch (classes) {
+      4 => secure,
+      3 => strong,
+      2 => medium,
+      _ => weak,
     };
   }
 
-  /// Instructions for the password strength.
-  static String get instructions {
-    return 'Enter a password that contains:\n\n'
-        '• At least $kDefaultStrengthLength characters\n'
-        '• At least 1 lowercase letter\n'
-        '• At least 1 uppercase letter\n'
-        '• At least 1 digit\n'
-        '• At least 1 special character';
-  }
+  /// Human readable rules for reaching [secure].
+  static String get instructions =>
+      'Enter a password that contains:\n\n'
+      '• At least $kDefaultStrengthLength characters\n'
+      '• At least 1 lowercase letter\n'
+      '• At least 1 uppercase letter\n'
+      '• At least 1 digit\n'
+      '• At least 1 special character (e.g. !@#\$%&*?)';
 }
